@@ -33,6 +33,15 @@ namespace mvc.Controllers
             return View();
         }
 
+        public IActionResult Register(){
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Register(RegLoginModel register){
+            return View(register);
+        }
+
 
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

@@ -5,10 +5,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using mvc.Models;
 
 namespace mvc.Controllers
 {
-    [Route("[controller]")]
+    // [Route("[controller]")]
     public class RegLoginController : Controller
     {
         private readonly ILogger<RegLoginController> _logger;
@@ -22,6 +23,17 @@ namespace mvc.Controllers
         {
             return View();
         }
+
+        public IActionResult Login(){
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Login(RegLoginModel login){
+            return View();
+        }
+
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

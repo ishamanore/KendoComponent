@@ -1,0 +1,31 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <form asp-action="login" method="post" asp-controller="LogIn">
+        <div class="container card " style="width: 40%;">
+            <legend>LogIn Here</legend>
+            <div class="form-group mb-3">
+                <label for="c_email" class="form-label">Email :</label>
+                <input type="text" name="c_email" id="c_email" class="form-control k-textbox">
+            </div>
+            <div class="form-group mb-3">
+                <label for="c_password" class="form-label">Password :</label>
+                <input type="text" name="c_password" id="c_password" class="form-control k-textbox">
+            </div>
+            <button type="submit" class="btn btn-primary mb-3" style="width: 20%;">LogIn</button>
+        </div>
+    </form>
+</body>
+@section Scripts {
+    <script>
+        
+    </script>
+}
+
+</html>

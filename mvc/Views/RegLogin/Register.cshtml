@@ -14,8 +14,8 @@
 
 <body>
     <form asp-action="Register" method="post" asp-controller="RegLogin">
-        <div class="container card " style="width: 40%;">
-            <legend>Register Here</legend>
+        <div class="container card text-center shadow-lg p-3 mb-5 bg-white rounded" style="width: 40%;  margin-top: 150px;">
+            <legend class="text-center">Register</legend>
             <div class="form-group mb-3">
                 <label for="c_username" class="form-label">User Name :</label>
                 <input type="text" name="c_username" id="c_username" class="k-textbox">
@@ -28,7 +28,9 @@
                 <label for="c_password" class="form-label">Password :</label>
                 <input type="text" name="c_password" id="c_password" class="k-textbox">
             </div>
-            <button type="submit" class="mb-3" id="btn" style="width: 20%;">Register</button>
+            <div class="form-group mb-3">
+                <button type="submit" class="mb-3" id="btn" style="width: 20%;">Register</button>
+            </div>  
         </div>
     </form>
 </body>

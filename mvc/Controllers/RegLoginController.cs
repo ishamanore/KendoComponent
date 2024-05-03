@@ -24,12 +24,14 @@ namespace mvc.Controllers
             return View();
         }
 
-        public IActionResult Login(){
+        public IActionResult Login()
+        {
             return View();
         }
 
         [HttpPost]
-        public IActionResult Login(RegLoginModel login){
+        public IActionResult Login(RegLoginModel login)
+        {
             return View();
         }
 

@@ -3,13 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2021.2.616/styles/kendo.common.min.css" />
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2021.2.616/styles/kendo.default.min.css" />
+    <link href="https://kendo.cdn.telerik.com/2023.1.117/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="https://kendo.cdn.telerik.com/2023.1.117/styles/kendo.default.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://kendo.cdn.telerik.com/2023.1.117/js/kendo.all.min.js"></script>
     <title>Document</title>
 </head>
 
 <body>
     <form asp-action="Register" method="post" asp-controller="RegLogin">
-        <div class="container card " style="width: 40%;">
-            <legend>Register Here</legend>
+        <div class="container card text-center shadow-lg p-3 mb-5 bg-white rounded" style="width: 40%;  margin-top: 150px;">
+            <legend class="text-center">Register</legend>
             <div class="form-group mb-3">
                 <label for="c_username" class="form-label">User Name :</label>
                 <input type="text" name="c_username" id="c_username" class="k-textbox">
@@ -22,10 +28,21 @@
                 <label for="c_password" class="form-label">Password :</label>
                 <input type="text" name="c_password" id="c_password" class="k-textbox">
             </div>
-            <button type="submit" class="btn btn-primary mb-3" style="width: 20%;">Register</button>
+            <div class="form-group mb-3">
+                <button type="submit" class="mb-3" id="btn" style="width: 20%;">Register</button>
+            </div>  
         </div>
     </form>
 </body>
+
+<script>
+    $(document).ready(function () {
+        $("#btn").kendoButton({
+            themeColor: "secondary",
+        });
+    });
+
+</script>
 
 
 </html>

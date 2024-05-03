@@ -6,17 +6,20 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using mvc.Models;
+using mvc.Repository.Interface;
 
 namespace mvc.Controllers
 {
     // [Route("[controller]")]
     public class RegLoginController : Controller
     {
-        private readonly ILogger<RegLoginController> _logger;
+        private readonly IRegLoginRepo _regLoginRepo;
+        protected IHttpContextAccessor _httpContextAccessor;
 
-        public RegLoginController(ILogger<RegLoginController> logger)
+        public RegLoginController(IRegLoginRepo regLoginRepo, IHttpContextAccessor httpContextAccessor)
         {
-            _logger = logger;
+            _regLoginRepo = regLoginRepo;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public IActionResult Index()
@@ -24,6 +27,20 @@ namespace mvc.Controllers
             return View();
         }
 
+        [HttpGet]
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Register(RegLoginModel register)
+        {
+            _regLoginRepo.Register(register);
+            return RedirectToAction("Login", "RegLogin");
+        }
+
+        [HttpGet]
         public IActionResult Login()
         {
             return View();
@@ -32,18 +49,24 @@ namespace mvc.Controllers
         [HttpPost]
         public IActionResult Login(RegLoginModel login)
         {
-            return View();
+            if (_regLoginRepo.Login(login))
+            {
+                string role = _httpContextAccessor.HttpContext.Session.GetString("role");
+                if (role.Equals("admin"))
+                {
+                    return RedirectToAction("Index", "Admin");
+                }
+                else
+                {
+                    return RedirectToAction("Index", "User");
+                }
+            }
+            else
+            {
+                TempData["loginfail"] = "Invalid credential";
+                return View();
+            }
         }
-
-        public IActionResult Register(){
-            return View();
-        }
-
-        [HttpPost]
-        public IActionResult Register(RegLoginModel register){
-            return View(register);
-        }
-
 
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

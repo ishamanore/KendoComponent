@@ -18,35 +18,27 @@
         </script>
     }
 
-
-
-
     <script>
         $(document).ready(function () {
             $("#btn").kendoButton({
                 themeColor: "primary",
             });
-
-            $("#btn").click(function(e){
-                console.log("Button clicked");
-                e.preventDefault();
-
-                var isEmailvalid = email();
-                var isPasswordvalid = password();
-                var isCheckboxChecked = checkbox();
-
-                if(!isEmailvalid || !isPasswordvalid || !isCheckboxChecked){
-                    return false;
-                }
-                $("#loginform").submit();
-            });
         });
+    </script>
+    <script>
+        function validateForm() {
+        var isEmailValid = email();
+        var isPasswordValid = password();
+        var isCheckboxChecked = checkbox();
+
+        return isEmailValid && isPasswordValid && isCheckboxChecked;
+    }
     </script>
     
 </head>
 
 <body>
-    <form asp-action="Login" method="post" asp-controller="RegLogin" id="loginform" class="k-form k-form-vertical">
+    <form asp-action="Login" method="post" asp-controller="RegLogin" id="loginform" class="k-form k-form-vertical" onsubmit="return validateForm()">
         <div class="container card  shadow-lg p-3 mb-5 bg-white rounded"  style="width: 35%; margin-top: 120px;">
             <legend class="text-center">LogIn</legend>
             <div class="k-form-field mb-3">

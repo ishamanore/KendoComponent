@@ -23,25 +23,25 @@
 </head>
 
 <body>
-    <form asp-action="Register" method="post" asp-controller="RegLogin">
-        <div class="container card text-center shadow-lg p-3 mb-5 bg-white rounded" style="width: 40%;  margin-top: 150px;">
+    <form asp-action="Register" method="post" asp-controller="RegLogin" class="k-form k-form-vertical">
+        <div class="container card shadow-lg p-3 mb-5 bg-white rounded" style="width: 40%;  margin-top: 150px;">
             <legend class="text-center">Register</legend>
-            <div class="form-group mb-3">
+            <div class="k-form-field mb-3">
                 <label for="c_username" class="form-label">User Name :</label>
                 <input type="text" name="c_username" id="c_username" class="k-textbox" onkeyup="username()"><br>
                 <span id="username" class="text-danger small"></span>
             </div>
-            <div class="form-group mb-3">
+            <div class="k-form-field mb-3">
                 <label for="c_email" class="form-label">Email :</label>
                 <input type="text" name="c_email" id="c_email" class="k-textbox" onkeyup="email()"><br>
                 <span id="emailid" class="text-danger small"></span>
             </div>
-            <div class="form-group mb-3">
+            <div class="k-form-field mb-3">
                 <label for="c_password" class="form-label">Password :</label>
                 <input type="password" name="c_password" id="c_password" class="k-textbox" onkeyup="password()"><br>
                 <span id="password" class="text-danger small"></span>
             </div>
-            <div class="form-group mb-3">
+            <div class="k-form-field mb-3">
                 <button type="submit" class="mb-3" id="btn" style="width: 20%;">Register</button>
             </div>  
         </div>

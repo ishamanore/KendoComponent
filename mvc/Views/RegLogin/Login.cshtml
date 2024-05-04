@@ -12,6 +12,14 @@
     <script src="https://kendo.cdn.telerik.com/2023.1.117/js/kendo.all.min.js"></script>
         <script src="/js/Login.js"> </script>
     <title>Document</title>
+    @if( TempData["loginfail"] != null){
+        <script>
+            alert("@TempData["loginfail"]");
+        </script>
+    }
+
+
+
 
     <script>
         $(document).ready(function () {
@@ -21,23 +29,20 @@
 
             $("#btn").click(function(e){
                 console.log("Button clicked");
-                
+                e.preventDefault();
+
                 var isEmailvalid = email();
                 var isPasswordvalid = password();
                 var isCheckboxChecked = checkbox();
 
                 if(!isEmailvalid || !isPasswordvalid || !isCheckboxChecked){
-                    e.preventDefault();
+                    return false;
                 }
                 $("#loginform").submit();
             });
         });
     </script>
-    @if( TempData["loginfail"] != null){
-        <script>
-            alert("@TempData["loginfail"]");
-        </script>
-    }
+    
 </head>
 
 <body>
@@ -55,7 +60,7 @@
                 <span id="password" class="text-danger small"></span>
             </div>
             <div class="form-group mb-3">
-                <input type="checkbox" class="k-checkbox" id="c_terms">
+                <input type="checkbox" class="k-checkbox" id="c_terms" onclick="checkbox()">
                 <label for="c_terms">Accept All Terms & conditions.</label><br>
                 <span id="checkbox" class="text-danger small"></span>
             </div>

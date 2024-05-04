@@ -9,6 +9,6 @@ namespace mvc.Repository.Interface
     public interface IRegLoginRepo
     {
         void Register(RegLoginModel reg);
-        bool Login(string c_email , string c_password);
+        bool Login(RegLoginModel login);
     }
 }

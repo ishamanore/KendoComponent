@@ -32,11 +32,10 @@ function password() {
 }
 
 function checkbox() {
-  if (!document.getElementById("c_terms").checked) {
-    document.getElementById("checkbox").innerText = "Please check the checkbox";
-    return false;
-  } else {
+  var checkbox = document.getElementById("c_terms");
+  if (checkbox.checked) {
     document.getElementById("checkbox").innerText = "";
-    return true;
+  } else {
+    document.getElementById("checkbox").innerText = "Please check the checkbox";
   }
 }

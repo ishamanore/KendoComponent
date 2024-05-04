@@ -47,9 +47,9 @@ namespace mvc.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login(string c_email, string c_password)
+        public IActionResult Login(RegLoginModel login)
         {
-            if (_regLoginRepo.Login(c_email, c_password))
+            if (_regLoginRepo.Login(login))
             {
                 string role = _httpContextAccessor.HttpContext.Session.GetString("role");
                 if (role.Equals("admin"))
@@ -67,6 +67,7 @@ namespace mvc.Controllers
                 return View();
             }
         }
+
 
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

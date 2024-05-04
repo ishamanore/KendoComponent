@@ -17,14 +17,26 @@
         $("#btn").kendoButton({
             themeColor: "secondary",
         });
+
+        $("#btn").click(function(e){
+            e.preventDefault();
+
+            var isUsernamevalid = username();
+            var isEmailvalid = email();
+            var isPasswordvalid = password();
+            if(!isUsernamevalid || !isEmailvalid || !isPasswordvalid){
+                return false;
+            }
+            $("#regform").submit();
+        });
     });
 
 </script>
 </head>
 
 <body>
-    <form asp-action="Register" method="post" asp-controller="RegLogin" class="k-form k-form-vertical">
-        <div class="container card shadow-lg p-3 mb-5 bg-white rounded" style="width: 40%;  margin-top: 150px;">
+    <form asp-action="Register" method="post" asp-controller="RegLogin" id="regform" class="k-form k-form-vertical">
+        <div class="container card shadow-lg p-3 mb-5 bg-white rounded" style="width: 40%;  margin-top: 90px;">
             <legend class="text-center">Register</legend>
             <div class="k-form-field mb-3">
                 <label for="c_username" class="form-label">User Name :</label>
@@ -42,7 +54,7 @@
                 <span id="password" class="text-danger small"></span>
             </div>
             <div class="k-form-field mb-3">
-                <button type="submit" class="mb-3" id="btn" style="width: 20%;">Register</button>
+                <button type="submit" id="btn" class="mb-3" id="btn" style="width: 20%;">Register</button>
             </div>  
         </div>
     </form>

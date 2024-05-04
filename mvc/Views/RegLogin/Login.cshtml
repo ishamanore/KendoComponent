@@ -11,26 +11,36 @@
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="https://kendo.cdn.telerik.com/2023.1.117/js/kendo.all.min.js"></script>
     <title>Document</title>
+    <script src="/js/Login.js"> </script>
+
+    @if(TempData["loginfail"] != null){
+        <script>
+            alert("@TempData["loginfail"]");
+        </script>
+    }
 </head>
 
 <body>
-    <form asp-action="Login" method="post" asp-controller="RegLogin">
+    <form>
         <div class="container card text-center shadow-lg p-3 mb-5 bg-white rounded"  style="width: 35%; margin-top: 150px;">
             <legend class="text-center">LogIn</legend>
             <div class="form-group mb-3">
                 <label for="c_email" class="form-label">Email :</label>
-                <input type="text" name="c_email" id="c_email" class="k-textbox">
+                <input type="text" name="c_email" id="c_email" class="k-textbox" onkeyup="email()"><br>
+                <span id="email" class="text-danger small"></span>
             </div>
             <div class="form-group mb-3">
                 <label for="c_password" class="form-label">Password :</label>
-                <input type="text" name="c_password" id="c_password" class="k-textbox">
+                <input type="text" name="c_password" id="c_password" class="k-textbox" onkeyup="password()"><br>
+                <span id="password" class="text-danger small"></span>
             </div>
             <div class="form-group mb-3">
                 <input type="checkbox" class="k-checkbox" id="c_terms">
-                <label for="c_terms">Accept All Terms & conditions.</label>
+                <label for="c_terms">Accept All Terms & conditions.</label><br>
+                <span id="checkbox" class="text-danger small"></span>
             </div>
             <div class="form-group mb-3">
-                <button type="submit" class="mb-3 " id="btn" style="width: 20%;">LogIn</button>
+                <button type="submit" class="mb-3 " id="btn" style="width: 20%;" onclick="login()" >LogIn</button>
             </div>
         </div>
     </form>
@@ -40,7 +50,39 @@
         $("#btn").kendoButton({
             themeColor: "primary",
         });
+        
     });
+
+    function login() {
+        event.preventDefault();
+
+        var isEmailValid = email();
+        var isPasswordValid = password();
+        var isCheckboxChecked = checkbox();
+        
+        if (isEmailValid && isPasswordValid && isCheckboxChecked) {
+            var login = {
+                c_email: $("#c_email").val(),
+                c_password: $("#c_password").val()
+            };
+            
+            $.ajax({
+                url: "RegLogin/Login", 
+                type: "POST", 
+                data: login,
+                success: function (response) {
+                    if (response == "admin") {
+                        window.location.href = "/Admin/Index";
+                    } else {
+                        window.location.href = "/User/Index";
+                    }
+                }
+            });
+        } else {
+            return false;
+        }
+    }
+
 </script>
 
 </html>

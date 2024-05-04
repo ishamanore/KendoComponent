@@ -47,18 +47,18 @@ namespace mvc.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login(RegLoginModel login)
+        public IActionResult Login(string c_email , string c_password)
         {
-            if (_regLoginRepo.Login(login))
+            if (_regLoginRepo.Login(c_email , c_password))
             {
                 string role = _httpContextAccessor.HttpContext.Session.GetString("role");
                 if (role.Equals("admin"))
                 {
-                    return RedirectToAction("Index", "Admin");
+                    return Ok(new { Response = "admin" });
                 }
                 else
                 {
-                    return RedirectToAction("Index", "User");
+                    return Ok(new { Response = "user" });
                 }
             }
             else

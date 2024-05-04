@@ -37,15 +37,15 @@ namespace mvc.Repository.Implemantation
             }
         }
 
-        public bool Login(RegLoginModel login)
+        public bool Login(string c_email , string c_password)
         {
             bool isUserValid = false;
             try
             {
                 conn.Open();
-                var cmd = new NpgsqlCommand("SELECT c_id, c_username, c_email, c_password, c_role FROM t_reglogin WHERE c_email=@c_email AND c_password=@c_password", conn);
-                cmd.Parameters.AddWithValue("@c_email", login.c_email);
-                cmd.Parameters.AddWithValue("@c_password", login.c_password);
+                var cmd = new NpgsqlCommand("SELECT c_id, c_email, c_password, c_role FROM t_reglogin WHERE c_email=@c_email AND c_password=@c_password", conn);
+                cmd.Parameters.AddWithValue("@c_email",c_email);
+                cmd.Parameters.AddWithValue("@c_password",c_password);
                 var reader = cmd.ExecuteReader();
                 if (reader.Read())
                 {

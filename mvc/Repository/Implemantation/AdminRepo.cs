@@ -31,11 +31,11 @@ namespace mvc.Repository.Implemantation
                         c_time = reader["c_time"].ToString(),
                         c_days = Convert.ToInt32(reader["c_days"]),
                         c_image = reader["c_image"].ToString(),
-                        c_price = Convert.ToDouble(reader["c_price"]),
+                        c_price = reader["c_price"].ToString(),
                         c_availableseat = Convert.ToInt32(reader["c_availableseat"]),
                         c_initialseat = Convert.ToInt32(reader["c_initialseat"]),
                         c_description = reader["c_description"].ToString(),
-                        tripname = reader["tripname"].ToString(),
+                        c_tripname = reader["c_tripname"].ToString(),
                     };
                     triplist.Add(trip);
                 }
@@ -72,11 +72,11 @@ namespace mvc.Repository.Implemantation
                     trip.c_time = reader["c_time"].ToString();
                     trip.c_days = Convert.ToInt32(reader["c_days"]);
                     trip.c_image = reader["c_image"].ToString();
-                    trip.c_price = Convert.ToDouble(reader["c_price"]);
+                    trip.c_price = reader["c_price"].ToString();
                     trip.c_availableseat = Convert.ToInt32(reader["c_availableseat"]);
                     trip.c_initialseat = Convert.ToInt32(reader["c_initialseat"]);
                     trip.c_description = reader["c_description"].ToString();
-                    trip.tripname = reader["tripname"].ToString();
+                    trip.c_tripname = reader["c_tripname"].ToString();
                 }
             }
             catch (Exception ex)

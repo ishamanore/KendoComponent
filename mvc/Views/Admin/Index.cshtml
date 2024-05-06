@@ -19,6 +19,10 @@
                     read: {
                         url: "/Admin/GetAllTrip/",
                         dataType: "json",
+                    },
+                    create: {
+                        url: "",
+                        dataType: "",
                     }
                 },
                 pageSize: 5,
@@ -61,16 +65,53 @@
                 pageable: true,
                 sortable: true,
                 filterable: true,
-                toolbar: ["create", "search", "excel"],
+                resizeable: true,
+                toolbar: [{ template: "<button id='addtripbtn'>Add Trip</button>" }, "search", "excel"],
                 search: { fields: ["c_triptype", "c_tripname", "c_date", "c_time", "c_days", "c_price", "c_availableseat", "c_initialseat", "c_description"] },
                 excel: { fileName: "alltrip.xlsx" },
             });
+            
+            @* for add trip *@
+            $("#addtrip").kendoWindow({
+                animation: false,
+                width: '600px',
+                height: '480px',
+                visible: false,
+                draggable: false,
+                resizable: false,
+                title: "Event Detail",
+                actions: [
+                    "Close"
+                ],
+                modal: true,
+            }).data("kendoWindow");
+
+
+            function AddTrip() {
+                $("#addtrip").data("kendoWindow").center().open();
+            };
+
+            $("#addtripbtn").kendoButton({
+                themeColor:"secondary",
+            }).click(AddTrip);
         });
     </script>
 
     <script>
         $(document).ready(function () {
-            $("#c_tripid").kendoDropDownList();
+            $("#c_tripid").kendoDropDownList({
+                optionLabel: "--select--",
+                dataValueField: "c_tripid",
+                dataTextField: "c_tripname",
+                dataSource: {
+                    transport: {
+                        read: {
+                            url: "/Admin/FetchTripName/",
+                            dataType: "json",
+                        }
+                    }
+                }
+            });
             $("#c_date").kendoDatePicker();
             $("#c_time").kendoTimePicker();
             $("#c_days").kendoTextBox();
@@ -78,17 +119,18 @@
             $("#c_availableseat").kendoTextBox();
             $("#c_initialseat").kendoTextBox();
             $("#c_description").kendoTextArea({
-                rows:3
+                rows: 3
             });
             $("#c_image").kendoUpload();
             $("#update").kendoButton({
-                themeColor:"secondary",
+                themeColor: "secondary",
             });
             $("#closebtn").kendoButton({
-                themeColor:"error",
-            })
+                themeColor: "error",
+            });
         });
     </script>
+
 </head>
 
 <body>
@@ -151,7 +193,8 @@
             </div>
             <div class="form-group">
                 <label for="c_description">Trip description:</label>
-                <textarea type="text" id="c_description" placeholder="about trip" name="c_description" class="form-control" rows="3"></textarea>
+                <textarea type="text" id="c_description" placeholder="about trip" name="c_description"
+                    class="form-control" rows="3"></textarea>
                 <span style="font-size:small" id="errordept"></span>
             </div>
         </div><br>

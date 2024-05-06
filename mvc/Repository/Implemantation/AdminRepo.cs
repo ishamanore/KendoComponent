@@ -124,7 +124,7 @@ namespace mvc.Repository.Implemantation
             {
                 conn.Open();
                 using var cmd = new NpgsqlCommand("UPDATE public.t_trip SET c_triptype=@c_triptype, c_tripid=@c_tripid, c_date=@c_date, c_time=@c_time, c_days=@c_days, c_image=@c_image, c_price=@c_price, c_availableseat=@c_availableseat, c_initialseat=@c_initialseat, c_description=@c_description WHERE c_id = @c_id", conn);
-                cmd.Parameters.AddWithValue("@c_id",trip.c_id);
+                cmd.Parameters.AddWithValue("@c_id", trip.c_id);
                 cmd.Parameters.AddWithValue("@c_triptype", trip.c_triptype);
                 cmd.Parameters.AddWithValue("@c_tripid", trip.c_tripid);
                 cmd.Parameters.AddWithValue("@c_date", trip.c_date);
@@ -152,11 +152,11 @@ namespace mvc.Repository.Implemantation
             try
             {
                 conn.Open();
-                using var cmd = new NpgsqlCommand("",conn);
-                cmd.Parameters.AddWithValue("@",id);
+                using var cmd = new NpgsqlCommand("", conn);
+                cmd.Parameters.AddWithValue("@", id);
                 cmd.ExecuteNonQuery();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex);
             }
@@ -165,13 +165,14 @@ namespace mvc.Repository.Implemantation
                 conn.Close();
             }
         }
-        public LinkedList<TripNames> FetchAllTripNames()
+
+        public List<TripNames> FetchAllTripNames()
         {
-            var triplist = new LinkedList<TripNames>();
+            var triplist = new List<TripNames>();
             try
             {
                 conn.Open();
-                using var cmd = new NpgsqlCommand("SELECT c_tripid, c_tripname FROM public.t_tripnames", conn);
+                using var cmd = new NpgsqlCommand("SELECT c_tripid, c_tripname FROM t_tripnames", conn);
                 using var reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
@@ -180,7 +181,7 @@ namespace mvc.Repository.Implemantation
                         c_tripid = Convert.ToInt32(reader["c_tripid"]),
                         c_tripname = reader["c_tripname"].ToString(),
                     };
-                    triplist.AddLast(trip);
+                    triplist.Add(trip);
                 }
             }
             catch (Exception ex)
@@ -189,10 +190,7 @@ namespace mvc.Repository.Implemantation
             }
             finally
             {
-                if (conn.State == ConnectionState.Open)
-                {
-                    conn.Close();
-                }
+                conn.Close();
             }
             return triplist;
         }

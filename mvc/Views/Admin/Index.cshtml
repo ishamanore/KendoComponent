@@ -67,6 +67,28 @@
             });
         });
     </script>
+
+    <script>
+        $(document).ready(function () {
+            $("#c_tripid").kendoDropDownList();
+            $("#c_date").kendoDatePicker();
+            $("#c_time").kendoTimePicker();
+            $("#c_days").kendoTextBox();
+            $("#c_price").kendoTextBox();
+            $("#c_availableseat").kendoTextBox();
+            $("#c_initialseat").kendoTextBox();
+            $("#c_description").kendoTextArea({
+                rows:3
+            });
+            $("#c_image").kendoUpload();
+            $("#update").kendoButton({
+                themeColor:"secondary",
+            });
+            $("#closebtn").kendoButton({
+                themeColor:"error",
+            })
+        });
+    </script>
 </head>
 
 <body>
@@ -87,51 +109,55 @@
             </div>
             <div class="form-group">
                 <label for="c_tripid">Trip name:</label>
-                <select name="c_tripid" id="c_tripid" class="form-control k-dropDownList">
+                <select name="c_tripid" id="c_tripid" class="form-control">
                     <option value="">--select trip--</option>
                 </select>
                 <span style="font-size:small" id="errorage"></span>
             </div>
             <div class="form-group">
-                <label for="male">Male</label>
-                <input type="date" id="c_date" name="c_date">
+                <label for="c_date">Select date:</label>
+                <input type="date" id="c_date" name="c_date" class="form-control k-date">
                 <span style="font-size:small" id="errorgender"></span>
             </div>
             <div class="form-group">
-                <label for="c_dob">Date of Birth</label>
-                <input title="datepicker" id="dob" style="width: 50%" class="form-control" name="c_dob">
+                <label for="c_time">Trip time:</label>
+                <input type="time" id="c_time" style="width: 50%" class="form-control" name="c_time">
                 <span style="font-size:small" id="errordob"></span>
             </div>
             <div class="form-group">
-                <label for="c_dept">Department</label>
-                <input id="c_dept" name="c_dept" class="form-control">
+                <label for="c_days">In how many days trip will arrive:</label>
+                <input type="number" id="c_days" name="c_days" class="form-control">
                 <span style="font-size:small" id="errordept"></span>
             </div>
             <div class="form-group">
-                <label for="c_interest">Interest</label>
-                <input id="c_interest" name="c_interest" class="form-control" multiple>
+                <label for="c_image">Upload image:</label>
+                <input type="file" id="c_image" name="c_image" class="form-control">
                 <span style="font-size:small" id="errorinterest"></span>
             </div>
             <div class="form-group">
-                <label for="c_hobby">Hobby: &nbsp;&nbsp;&nbsp;</label>
-                <input type="checkbox" class="form-control k-checkbox" id="travelling" name="travelling">
-                <label for="c_hobby">Travelling</label>
-                <input type="checkbox" class="form-control k-checkbox" id="yoga" name="yoga">
-                <label for="c_hobby">Yoga</label>
-                <input type="checkbox" class="form-control k-checkbox" id="photography" name="photography">
-                <label for="c_hobby">Photography</label>
-                <span style="font-size:small" id="errorhobby"></span>
-
+                <label for="c_price">Trip price:</label>
+                <input type="number" id="c_price" name="c_price" class="form-control">
+                <span style="font-size:small" id="errordept"></span>
             </div>
-            <div class="k-upload-button">
-                <input type="file" id="photo" onchange="imageNameChange(event);">
-                <input type="hidden" id="c_photo">
-                <span style="font-size:small" id="errorphoto"></span>
+            <div class="form-group">
+                <label for="c_availableseat">Available seat:</label>
+                <input type="number" id="c_availableseat" name="c_availableseat" class="form-control">
+                <span style="font-size:small" id="errordept"></span>
             </div>
-        </div>
+            <div class="form-group">
+                <label for="c_days">Initial seat:</label>
+                <input type="number" id="c_initialseat" name="c_initialseat" class="form-control">
+                <span style="font-size:small" id="errordept"></span>
+            </div>
+            <div class="form-group">
+                <label for="c_description">Trip description:</label>
+                <textarea type="text" id="c_description" placeholder="about trip" name="c_description" class="form-control" rows="3"></textarea>
+                <span style="font-size:small" id="errordept"></span>
+            </div>
+        </div><br>
         <div>
             <button class="btn btn-primary" onclick="EditStudent()" id="update">Add</button>
-            <button class="btn btn-trans" onclick="closepopup()">Close</button>
+            <button class="btn btn-trans" onclick="closepopup()" id="closebtn">Close</button>
         </div>
     </div>
 </body>

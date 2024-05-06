@@ -165,6 +165,37 @@ namespace mvc.Repository.Implemantation
                 conn.Close();
             }
         }
+        public LinkedList<TripNames> FetchAllTripNames()
+        {
+            var triplist = new LinkedList<TripNames>();
+            try
+            {
+                conn.Open();
+                using var cmd = new NpgsqlCommand("SELECT c_tripid, c_tripname FROM public.t_tripnames", conn);
+                using var reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    TripNames trip = new TripNames()
+                    {
+                        c_tripid = Convert.ToInt32(reader["c_tripid"]),
+                        c_tripname = reader["c_tripname"].ToString(),
+                    };
+                    triplist.AddLast(trip);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+            finally
+            {
+                if (conn.State == ConnectionState.Open)
+                {
+                    conn.Close();
+                }
+            }
+            return triplist;
+        }
 
     }
 }

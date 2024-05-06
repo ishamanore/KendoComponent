@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://kendo.cdn.telerik.com/2023.1.117/styles/kendo.common.min.css" rel="stylesheet" />
     <link href="https://kendo.cdn.telerik.com/2023.1.117/styles/kendo.default.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="https://kendo.cdn.telerik.com/2023.1.117/js/kendo.all.min.js"></script>
     <script src="https://unpkg.com/jszip/dist/jszip.min.js"></script>
     <script src="https://unpkg.com/pako/dist/pako_deflate.min.js"></script>
@@ -14,6 +16,36 @@
 
     <script>
         $(document).ready(function () {
+            $("#c_tripid").kendoDropDownList({
+                optionLabel: "--select--",
+                dataValueField: "c_tripid",
+                dataTextField: "c_tripname",
+                dataSource: {
+                    transport: {
+                        read: {
+                            url: "/Admin/FetchTripName/",
+                            dataType: "json",
+                        }
+                    }
+                }
+            });
+            $("#c_date").kendoDatePicker();
+            $("#c_time").kendoTimePicker();
+            $("#c_days").kendoTextBox();
+            $("#c_price").kendoTextBox();
+            $("#c_availableseat").kendoTextBox();
+            $("#c_initialseat").kendoTextBox();
+            $("#c_description").kendoTextArea({
+                rows: 3
+            });
+            $("#c_image").kendoUpload();
+            $("#update").kendoButton({
+                themeColor: "secondary",
+            });
+            $("#closebtn").kendoButton({
+                themeColor: "error",
+            });
+
             var dataSource = new kendo.data.DataSource({
                 transport: {
                     read: {
@@ -75,7 +107,7 @@
                 visible: false,
                 draggable: false,
                 resizable: false,
-                title: "Event Detail",
+                title: "Add Trip",
                 actions: [
                     "Close"
                 ],
@@ -91,88 +123,51 @@
             }).click(AddTrip);
         });
 
-        @* function for edit/add trip *@
         function EditStudent(){
-            var id = $("#c_id").val();
-            var trip={
-                c_triptype:$("input[name='c_triptype']:checked").val();
-                c_tripid:parseInt($("#c_tripid").val());
-                c_date:$("#c_date").val();
-                c_time:$("#c_time").val();
-                c_days:$("#c_days").val();
-                c_image:$("#c_image").val();
-                c_price:$("#c_price").val();
-                c_availableseat:$("#c_availableseat").val();
-                c_initialseat:$("#c_initialseat").val();
-                c_description:$("#c_description").val();
-            };
-
-            if(!id){
-                $.ajax({
-                    url:"/Admin/AddTrip/",
-                    type:"POST",
-                    data:trip,
-                    success:function(response){
-                        window.location.reload();                   
-                    },
-                    error: function (error) {
-                            console.log("error while adding data: " + error);
-                    }
-
-                });
-            }
-            else{
-                $.ajax({
-                    url:"/Admin/UpdateTrip/",
-                    type:"POST",
-                    data:trip,
-                    success:function(response){
-                        window.location.reload();                   
-                    },
-                    error: function (error) {
-                            console.log("error while adding data: " + error);
-                    }
-                });
-            }
-        }
-    </script>
-
-
-
-    @* for kendo *@
-    <script>
-        $(document).ready(function () {
-            $("#c_tripid").kendoDropDownList({
-                optionLabel: "--select--",
-                dataValueField: "c_tripid",
-                dataTextField: "c_tripname",
-                dataSource: {
-                    transport: {
-                        read: {
-                            url: "/Admin/FetchTripName/",
-                            dataType: "json",
-                        }
-                    }
+        var id = $("#c_id").val();
+        var trip = {
+            c_triptype: $("input[name='c_triptype']:checked").val(),
+            c_tripid: parseInt($("#c_tripid").val()),
+            c_date: $("#c_date").val(),
+            c_time: $("#c_time").val(),
+            c_days: $("#c_days").val(),
+            c_image: $("#c_image").val(),
+            c_price: $("#c_price").val(),
+            c_availableseat: $("#c_availableseat").val(),
+            c_initialseat: $("#c_initialseat").val(),
+            c_description: $("#c_description").val()
+        };
+        console.log(trip);
+        if (!id) {
+            $.ajax({
+                url: "/Admin/AddTrip/",
+                type: "POST",
+                data: trip,
+                success: function(response) {
+                    window.location.reload();                   
+                },
+                error: function (error) {
+                    console.log("error while adding data: " + error);
                 }
             });
-            $("#c_date").kendoDatePicker();
-            $("#c_time").kendoTimePicker();
-            $("#c_days").kendoTextBox();
-            $("#c_price").kendoTextBox();
-            $("#c_availableseat").kendoTextBox();
-            $("#c_initialseat").kendoTextBox();
-            $("#c_description").kendoTextArea({
-                rows: 3
+        } else {
+            $.ajax({
+                url: "/Admin/UpdateTrip/",
+                type: "POST",
+                data: trip,
+                success: function(response) {
+                    window.location.reload();                   
+                },
+                error: function (error) {
+                    console.log("error while adding data: " + error);
+                }
             });
-            $("#c_image").kendoUpload();
-            $("#update").kendoButton({
-                themeColor: "secondary",
-            });
-            $("#closebtn").kendoButton({
-                themeColor: "error",
-            });
-        });
+        }
+    }
+
     </script>
+
+
 
 </head>
 

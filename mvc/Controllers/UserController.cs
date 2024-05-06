@@ -12,14 +12,20 @@ namespace mvc.Controllers
     public class UserController : Controller
     {
         private readonly ILogger<UserController> _logger;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public UserController(ILogger<UserController> logger)
+        public UserController(ILogger<UserController> logger , IHttpContextAccessor httpContextAccessor)
         {
             _logger = logger;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public IActionResult Index()
         {
+            int userid = (int)_httpContextAccessor.HttpContext.Session.GetInt32("userid");
+            if(userid == null ){
+                return RedirectToAction("Login" , "RegLogin");
+            }
             return View();
         }
 

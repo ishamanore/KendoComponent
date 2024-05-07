@@ -8,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddSingleton<IRegLoginRepo, RegLoginRepo>();
 builder.Services.AddSingleton<IAdminRepo, AdminRepo>();
+builder.Services.AddSingleton<IUserRepo, UserRepo>();
 
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>

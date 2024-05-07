@@ -18,7 +18,7 @@ namespace mvc.Repository.Implemantation
             try
             {
                 conn.Open();
-                using var cmd = new NpgsqlCommand("SELECT t.c_id, t.c_triptype, t.c_tripid, t.c_date, t.c_time, t.c_days, t.c_image, t.c_price, t.c_availableseat, t.c_initialseat, t.c_description , n.c_tripname FROM public.t_trip t inner join t_tripnames n on t.c_tripid = n.c_tripid", conn);
+                using var cmd = new NpgsqlCommand("SELECT t.c_id, t.c_triptype, t.c_tripid, t.c_date, t.c_time, t.c_days, t.c_image, t.c_price, t.c_availableseat, t.c_initialseat, t.c_description , n.c_tripname FROM public.t_trip t inner join t_tripnames n on t.c_tripid = n.c_tripid LIMIT 3", conn);
                 using var reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
@@ -31,11 +31,11 @@ namespace mvc.Repository.Implemantation
                         c_time = reader["c_time"].ToString(),
                         c_days = Convert.ToInt32(reader["c_days"]),
                         c_image = reader["c_image"].ToString(),
-                        c_price = Convert.ToDouble(reader["c_price"]),
+                        c_price = reader["c_price"].ToString(),
                         c_availableseat = Convert.ToInt32(reader["c_availableseat"]),
                         c_initialseat = Convert.ToInt32(reader["c_initialseat"]),
                         c_description = reader["c_description"].ToString(),
-                        tripname = reader["tripname"].ToString(),
+                        c_tripname = reader["c_tripname"].ToString(),
                     };
                     triplist.Add(trip);
                 }
@@ -72,11 +72,11 @@ namespace mvc.Repository.Implemantation
                     trip.c_time = reader["c_time"].ToString();
                     trip.c_days = Convert.ToInt32(reader["c_days"]);
                     trip.c_image = reader["c_image"].ToString();
-                    trip.c_price = Convert.ToDouble(reader["c_price"]);
+                    trip.c_price = reader["c_price"].ToString();
                     trip.c_availableseat = Convert.ToInt32(reader["c_availableseat"]);
                     trip.c_initialseat = Convert.ToInt32(reader["c_initialseat"]);
                     trip.c_description = reader["c_description"].ToString();
-                    trip.tripname = reader["tripname"].ToString();
+                    trip.c_tripname = reader["c_tripname"].ToString();
                 }
             }
             catch (Exception ex)
@@ -124,7 +124,7 @@ namespace mvc.Repository.Implemantation
             {
                 conn.Open();
                 using var cmd = new NpgsqlCommand("UPDATE public.t_trip SET c_triptype=@c_triptype, c_tripid=@c_tripid, c_date=@c_date, c_time=@c_time, c_days=@c_days, c_image=@c_image, c_price=@c_price, c_availableseat=@c_availableseat, c_initialseat=@c_initialseat, c_description=@c_description WHERE c_id = @c_id", conn);
-                cmd.Parameters.AddWithValue("@c_id",trip.c_id);
+                cmd.Parameters.AddWithValue("@c_id", trip.c_id);
                 cmd.Parameters.AddWithValue("@c_triptype", trip.c_triptype);
                 cmd.Parameters.AddWithValue("@c_tripid", trip.c_tripid);
                 cmd.Parameters.AddWithValue("@c_date", trip.c_date);
@@ -152,11 +152,11 @@ namespace mvc.Repository.Implemantation
             try
             {
                 conn.Open();
-                using var cmd = new NpgsqlCommand("",conn);
-                cmd.Parameters.AddWithValue("@",id);
+                using var cmd = new NpgsqlCommand("", conn);
+                cmd.Parameters.AddWithValue("@", id);
                 cmd.ExecuteNonQuery();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex);
             }
@@ -164,6 +164,35 @@ namespace mvc.Repository.Implemantation
             {
                 conn.Close();
             }
+        }
+
+        public List<TripNames> FetchAllTripNames()
+        {
+            var triplist = new List<TripNames>();
+            try
+            {
+                conn.Open();
+                using var cmd = new NpgsqlCommand("SELECT c_tripid, c_tripname FROM t_tripnames", conn);
+                using var reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    TripNames trip = new TripNames()
+                    {
+                        c_tripid = Convert.ToInt32(reader["c_tripid"]),
+                        c_tripname = reader["c_tripname"].ToString(),
+                    };
+                    triplist.Add(trip);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return triplist;
         }
 
     }

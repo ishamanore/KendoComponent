@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using mvc.Repository.Interface;
 
 namespace mvc.Controllers
 {
@@ -14,10 +15,13 @@ namespace mvc.Controllers
         private readonly ILogger<UserController> _logger;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public UserController(ILogger<UserController> logger , IHttpContextAccessor httpContextAccessor)
+        private readonly IUserRepo _userRepo;
+
+        public UserController(ILogger<UserController> logger , IHttpContextAccessor httpContextAccessor , IUserRepo userRepo)
         {
             _logger = logger;
             _httpContextAccessor = httpContextAccessor;
+            _userRepo = userRepo;
         }
 
         public IActionResult Index()
@@ -27,6 +31,24 @@ namespace mvc.Controllers
                 return RedirectToAction("Login" , "RegLogin");
             }
             return View();
+        }
+
+        [HttpGet]
+        public IActionResult GetTripName(string type){
+            var tripnames = _userRepo.GetTripNames(type);
+            return Ok(tripnames);
+        }
+
+        [HttpGet]
+        public IActionResult GetTripDate(int name){
+            var dates = _userRepo.GetTripDate(name);
+            return Ok(dates);
+        }
+
+        [HttpGet]
+        public IActionResult GetTripPrice(int name , string date){
+            var price = _userRepo.GetTripPrice(name, date);
+            return Ok(price);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

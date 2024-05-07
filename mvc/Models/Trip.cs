@@ -19,7 +19,6 @@ namespace mvc.Models
         public int c_initialseat{ get; set; }
         public string c_description{ get; set; }
 
-
         public string tripname { get; set; }
     }
 }

@@ -89,7 +89,7 @@
                     { field: "c_availableseat", title: "Available seat" },
                     { field: "c_initialseat", title: "Initial seat" },
                     { field: "c_description", title: "Description" },
-                    {command: [{text:"Edit trip",click:edittrip},{text:"delete"} ], title: "Action", width: 200}
+                    {command: [{text:"Edit trip",click:edittrip},{text:"Delete", click:deletetrip} ], title: "Action", width: 200}
                 ],
                 editable: "popup",
                 pageable: true,
@@ -151,6 +151,18 @@
                 $("#update").text("Update trip");
             };
 
+            function deletetrip(e){
+                e.preventDefault();
+                var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+                var tripid = dataItem.c_id;
+                $.ajax({
+                    url:"/Admin/DeleteTrip/"+tripid,
+                    method:"DELETE",
+                    success:function(response){
+                        dataSource.read();
+                    }
+                });
+            };
         });
 
         function EditTrip() {

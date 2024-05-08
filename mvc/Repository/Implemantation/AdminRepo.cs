@@ -154,8 +154,8 @@ namespace mvc.Repository.Implemantation
             try
             {
                 conn.Open();
-                using var cmd = new NpgsqlCommand("", conn);
-                cmd.Parameters.AddWithValue("@", id);
+                using var cmd = new NpgsqlCommand("DELETE FROM public.t_trip WHERE c_id = @c_id", conn);
+                cmd.Parameters.AddWithValue("@c_id", id);
                 cmd.ExecuteNonQuery();
             }
             catch (Exception ex)

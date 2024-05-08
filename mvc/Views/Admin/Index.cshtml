@@ -78,6 +78,7 @@
             $("#admingrid").kendoGrid({
                 dataSource: dataSource,
                 columns: [
+                    { selectable: true, width: "50px"},
                     { field: "c_id", title: "Id", hidden: true },
                     { field: "c_triptype", title: "Type", width: 120 },
                     { field: "c_tripname", title: "Name", width: 120 },
@@ -163,6 +164,8 @@
                     }
                 });
             };
+
+            
         });
 
         function EditTrip() {
@@ -232,6 +235,43 @@
             });
         }
 
+
+        async function DeleteMultiple() {
+                var grid = $("#admingrid").data('kendoGrid');
+                var rows = grid.select();
+                var ids = [];
+                var i = 0;
+                rows.each(function () {
+                    ids[i] = grid.dataItem(this).c_id;
+                    i++;
+                });
+                ids.forEach(function (id) {
+                    console.log(id);
+                });
+                if (i == 0) {
+                    alert("please select atleast one student");
+                }
+                else {
+                    for (var d = 0; d < ids.length; d++) {
+                        await $.ajax({
+                            url:"/Admin/DeleteTrip/"+ids[d],
+                            type: 'DELETE',
+                            success: function () {
+                                console.log("Deleted");
+                            },
+                            error: function (error) {
+                                console.log("Error while deleting: " + error);
+                            }
+                        });
+                        await sleep(100);
+                    }
+                    window.location.reload();
+                }
+            }
+            function sleep(ms) {
+                return new Promise(resolve => setTimeout(resolve, ms));
+            }
+
     </script>
 
 
@@ -239,6 +279,14 @@
 </head>
 
 <body>
+    <div class="container">
+        <div class="table">
+            <div class="row">
+                <div class="col-sm-3"><button class="" onclick="DeleteMultiple()">Delete Student</button></div>
+            </div>
+        </div>
+
+    </div>
     <div id="admingrid"></div>
 
     <div id="addtrip">

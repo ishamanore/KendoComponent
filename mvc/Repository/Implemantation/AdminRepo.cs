@@ -12,13 +12,16 @@ namespace mvc.Repository.Implemantation
     public class AdminRepo : CommonRepo, IAdminRepo
     {
 
-        public List<Trip> FetchAllTrip()
+        public List<Trip> FetchAllTrip(int pagenumber, int pageSize)
         {
             var triplist = new List<Trip>();
             try
             {
                 conn.Open();
-                using var cmd = new NpgsqlCommand("SELECT t.c_id, t.c_triptype, t.c_tripid, t.c_date, t.c_time, t.c_days, t.c_image, t.c_price, t.c_availableseat, t.c_initialseat, t.c_description , n.c_tripname FROM public.t_trip t inner join t_tripnames n on t.c_tripid = n.c_tripid LIMIT 3", conn);
+                int offset = (pagenumber - 1) * pageSize;
+                using var cmd = new NpgsqlCommand("SELECT t.c_id, t.c_triptype, t.c_tripid, t.c_date, t.c_time, t.c_days, t.c_image, t.c_price, t.c_availableseat, t.c_initialseat, t.c_description , n.c_tripname FROM public.t_trip t inner join t_tripnames n on t.c_tripid = n.c_tripid ORDER BY t.c_id LIMIT @PageSize OFFSET @Offset", conn);
+                cmd.Parameters.AddWithValue("@PageSize", pageSize);
+                cmd.Parameters.AddWithValue("@Offset", offset);
                 using var reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {

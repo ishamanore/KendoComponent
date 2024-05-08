@@ -26,9 +26,9 @@ namespace mvc.Controllers
         }
 
         //fetch all trip
-        public IActionResult GetAllTrip()
+        public IActionResult GetAllTrip(int pagenumber = 1, int pageSize = 1)
         {
-            var trips = _adminRepo.FetchAllTrip();
+            var trips = _adminRepo.FetchAllTrip(pagenumber, pageSize);
             return Json(trips);
         }
 
@@ -41,24 +41,8 @@ namespace mvc.Controllers
 
         //add trip
         [HttpPost("/AddTrip")]
-        public IActionResult AddTrip(Trip addtrip, IFormFile file)
+        public IActionResult AddTrip(Trip addtrip)
         {
-            //image
-            if (file != null && file.Length > 0)
-            {
-                var folderpath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images");
-                if (!Directory.Exists(folderpath))
-                {
-                    Directory.CreateDirectory(folderpath);
-                }
-                var filename = Path.GetFileName(file.FileName);
-                var filepath = Path.Combine(folderpath, filename);
-                var stream = new FileStream(filepath, FileMode.Create);
-                file.CopyTo(stream);
-                var imgurl = "/images/" + filename;
-                addtrip.c_image = imgurl;
-            }
-
             _adminRepo.AddTrip(addtrip);
             return Ok();
         }
@@ -74,6 +58,27 @@ namespace mvc.Controllers
         public IActionResult DeleteTrip(int id)
         {
             _adminRepo.DeleteTrip(id);
+            return Ok();
+        }
+
+
+        [HttpPost]
+        public IActionResult UploadImage(IFormFile file)
+        {
+            if (file != null && file.Length > 0)
+            {
+                var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images");
+                var fileName = Path.GetFileName(file.FileName);
+                var filePath = Path.Combine(folderPath, fileName);
+
+                if (!System.IO.File.Exists(filePath))
+                {
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        file.CopyTo(stream);
+                    }
+                }
+            }
             return Ok();
         }
 

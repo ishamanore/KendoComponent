@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using mvc.Models;
 using mvc.Repository.Interface;
 
 namespace mvc.Controllers
@@ -30,6 +31,7 @@ namespace mvc.Controllers
             if(userid == null ){
                 return RedirectToAction("Login" , "RegLogin");
             }
+            ViewBag.userid = userid;
             return View();
         }
 
@@ -50,6 +52,23 @@ namespace mvc.Controllers
             var price = _userRepo.GetTripPrice(name, date);
             return Ok(price);
         }
+
+        [HttpPost]
+        public IActionResult registerTrip(RegisterTrip registerTrip){
+            if(_userRepo.seatValidation(registerTrip)){
+                if(_userRepo.registerTrip(registerTrip)){
+                    return  Ok();
+                }
+                return BadRequest(new {Response = "Not Registered!"});
+            }
+            else{
+                return BadRequest(new {Response= "Seat not available!!"});
+            }
+           
+        }
+
+        // [HttpPost]
+        // public IActionResult 
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

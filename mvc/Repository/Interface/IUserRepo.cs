@@ -12,5 +12,10 @@ namespace mvc.Repository.Interface
         List<string> GetTripDate(int name);
 
         double GetTripPrice(int name , string date);
+
+        bool seatValidation (RegisterTrip registerTrip);
+
+        bool registerTrip(RegisterTrip registerTrip);
+
     }
 }

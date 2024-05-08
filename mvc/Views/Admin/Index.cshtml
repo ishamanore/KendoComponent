@@ -177,15 +177,15 @@
                 var formData = new FormData();
                 formData.append("file", value);
                 var settings = {
-                    url: "/Admin/UploadImage", // Corrected property separator (comma instead of semicolon)
+                    url: "/Admin/UploadImage", 
                     data: formData,
                     processData: false,
                     contentType: false,
-                    method: "POST", // Corrected method name (uppercase POST)
-                    success: function () { // Added success callback function
+                    method: "POST", 
+                    success: function () { 
                         console.log("Image uploaded successfully");
                     },
-                    error: function () { // Added error callback function
+                    error: function () { 
                         console.error("Error uploading image");
                     }
                 };

@@ -8,7 +8,7 @@ namespace mvc.Repository.Interface
 {
     public interface IAdminRepo
     {
-        List<Trip> FetchAllTrip();
+        List<Trip> FetchAllTrip(int pagenumber, int pagesize);
         Trip GetOneTrip(int id);
         void AddTrip(Trip trip);
         void UpdateTrip(Trip trip);

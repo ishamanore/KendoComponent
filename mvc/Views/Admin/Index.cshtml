@@ -38,7 +38,7 @@
             $("#c_description").kendoTextArea({
                 rows: 3
             });
-            $("#c_image").kendoUpload();
+            $("#photo").kendoUpload();
             $("#update").kendoButton({
                 themeColor: "secondary",
             });
@@ -51,55 +51,56 @@
                     read: {
                         url: "/Admin/GetAllTrip/",
                         dataType: "json",
+
                     },
                 },
-                pageSize: 5,
+                serverPaging: true,
                 schema: {
-                    model: {
-                        id: "c_id",
-                        fields: {
-                            c_id: { type: "number" },
-                            c_triptype: { type: "string" },
-                            c_tripname: { type: "string" },
-                            c_date: { type: "string" },
-                            c_time: { type: "string" },
-                            c_days: { type: "number" },
-                            c_image: { type: "string" },
-                            c_price: { type: "string" },
-                            c_availableseat: { type: "number" },
-                            c_initialseat: { type: "number" },
-                            c_description: { type: "string" },
-                        }
+                model: {
+                    id: "c_id",
+                    fields: {
+                        c_id: { type: "number" },
+                        c_triptype: { type: "string" },
+                        c_tripname: { type: "string" },
+                        c_date: { type: "string" },
+                        c_time: { type: "string" },
+                        c_days: { type: "number" },
+                        c_image: { type: "string" },
+                        c_price: { type: "string" },
+                        c_availableseat: { type: "number" },
+                        c_initialseat: { type: "number" },
+                        c_description: { type: "string" },
                     }
                 }
+            },
             });
 
-            $("#admingrid").kendoGrid({
-                dataSource: dataSource,
-                columns: [
-                    { field: "c_id", title: "Id", hidden: true },
-                    { field: "c_triptype", title: "Type", width: 120 },
-                    { field: "c_tripname", title: "Name", width: 120 },
-                    { field: "c_date", title: "Date" },
-                    { field: "c_time", title: "Time" },
-                    { field: "c_days", title: "Days" },
-                    { field: "c_image", title: "Image", template: '<img src="#= c_image #" alt="#= c_image #" style= "border-radius:20%; width:30px; height:30px"></img>' },
-                    { field: "c_price", title: "Price" },
-                    { field: "c_availableseat", title: "Available seat" },
-                    { field: "c_initialseat", title: "Initial seat" },
-                    { field: "c_description", title: "Description" },
-                ],
-                editable: "popup",
-                pageable: true,
-                sortable: true,
-                filterable: true,
-                resizeable: true,
-                toolbar: [{ template: "<button id='addtripbtn'>Add Trip</button>" }, "search", "excel"],
-                search: { fields: ["c_triptype", "c_tripname", "c_date", "c_time", "c_days", "c_price", "c_availableseat", "c_initialseat", "c_description"] },
-                excel: { fileName: "alltrip.xlsx" },
-            });
+        $("#admingrid").kendoGrid({
+            dataSource: dataSource,
+            columns: [
+                { field: "c_id", title: "Id", hidden: true },
+                { field: "c_triptype", title: "Type", width: 120 },
+                { field: "c_tripname", title: "Name", width: 120 },
+                { field: "c_date", title: "Date" },
+                { field: "c_time", title: "Time" },
+                { field: "c_days", title: "Days" },
+                { field: "c_image", title: "Image", template: '<img src="#= c_image #" alt="#= c_image #" style= "border-radius:20%; width:30px; height:30px"></img>' },
+                { field: "c_price", title: "Price" },
+                { field: "c_availableseat", title: "Available seat" },
+                { field: "c_initialseat", title: "Initial seat" },
+                { field: "c_description", title: "Description" },
+            ],
+            editable: "popup",
+            pageable: true,
+            sortable: true,
+            filterable: true,
+            resizeable: true,
+            toolbar: [{ template: "<button id='addtripbtn'>Add Trip</button>" }, "search", "excel"],
+            search: { fields: ["c_triptype", "c_tripname", "c_date", "c_time", "c_days", "c_price", "c_availableseat", "c_initialseat", "c_description"] },
+            excel: { fileName: "alltrip.xlsx" },
+        });
 
-        @* for add trip *@
+            @* for add trip *@
             $("#addtrip").kendoWindow({
                 animation: false,
                 width: '600px',
@@ -114,56 +115,80 @@
                 modal: true,
             }).data("kendoWindow");
 
-            function AddTrip() {
-                $("#addtrip").data("kendoWindow").center().open();
-            };
+        function AddTrip() {
+            $("#addtrip").data("kendoWindow").center().open();
+        };
 
-            $("#addtripbtn").kendoButton({
-                themeColor:"secondary",
-            }).click(AddTrip);
+        $("#addtripbtn").kendoButton({
+            themeColor: "secondary",
+        }).click(AddTrip);
         });
 
-        function EditStudent(){
-        var id = $("#c_id").val();
-        var trip = {
-            c_triptype: $("input[name='c_triptype']:checked").val(),
-            c_tripid: parseInt($("#c_tripid").val()),
-            c_date: $("#c_date").val(),
-            c_time: $("#c_time").val(),
-            c_days: $("#c_days").val(),
-            c_image: $("#c_image").val(),
-            c_price: $("#c_price").val(),
-            c_availableseat: $("#c_availableseat").val(),
-            c_initialseat: $("#c_initialseat").val(),
-            c_description: $("#c_description").val()
-        };
-        console.log(trip);
-        if (!id) {
-            $.ajax({
-                url: "/Admin/AddTrip/",
-                type: "POST",
-                data: trip,
-                success: function(response) {
-                    window.location.reload();                   
-                },
-                error: function (error) {
-                    console.log("error while adding data: " + error);
-                }
-            });
-        } else {
-            $.ajax({
-                url: "/Admin/UpdateTrip/",
-                type: "POST",
-                data: trip,
-                success: function(response) {
-                    window.location.reload();                   
-                },
-                error: function (error) {
-                    console.log("error while adding data: " + error);
-                }
+        function EditStudent() {
+            var id = $("#c_id").val();
+            var trip = {
+                c_triptype: $("input[name='c_triptype']:checked").val(),
+                c_tripid: parseInt($("#c_tripid").val()),
+                c_date: $("#c_date").val(),
+                c_time: $("#c_time").val(),
+                c_days: parseInt($("#c_days").val()),
+                c_image: $("#c_image").val(),
+                c_price: parseFloat($("#c_price").val()),
+                c_availableseat: parseInt($("#c_availableseat").val()),
+                c_initialseat: parseInt($("#c_initialseat").val()),
+                c_description: $("#c_description").val()
+            };
+            console.log(trip);
+            if (!id) {
+                $.ajax({
+                    url: "/AddTrip",
+                    type: "POST",
+                    data: trip,
+                    success: function (response) {
+                        window.location.reload();
+                    },
+                    error: function (error) {
+                        console.log("error while adding data: " + error);
+                    }
+                });
+            } else {
+                $.ajax({
+                    url: "/Admin/UpdateTrip/",
+                    type: "POST",
+                    data: trip,
+                    success: function (response) {
+                        window.location.reload();
+                    },
+                    error: function (error) {
+                        console.log("error while adding data: " + error);
+                    }
+                });
+            }
+        }
+
+
+        function imageNameChange(e) {
+            $.each(e.target.files, function (index, value) {
+                var fileNameWithName = "/images/" + value.name;
+                $("#c_image").val(fileNameWithName).change();
+                var formData = new FormData();
+                formData.append("file", value);
+                var settings = {
+                    url: "/Admin/UploadImage", // Corrected property separator (comma instead of semicolon)
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    method: "POST", // Corrected method name (uppercase POST)
+                    success: function () { // Added success callback function
+                        console.log("Image uploaded successfully");
+                    },
+                    error: function () { // Added error callback function
+                        console.error("Error uploading image");
+                    }
+                };
+                $.ajax(settings);
             });
         }
-    }
 
     </script>
 
@@ -211,7 +236,8 @@
             </div>
             <div class="form-group">
                 <label for="c_image">Upload image:</label>
-                <input type="file" id="c_image" name="c_image" class="form-control">
+                <input type="file" id="photo" name="photo" class="form-control" onchange="imageNameChange(event);">
+                <input type="hidden" name="c_image" id="c_image">
                 <span style="font-size:small" id="errorinterest"></span>
             </div>
             <div class="form-group">

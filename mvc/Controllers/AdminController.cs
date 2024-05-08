@@ -26,7 +26,7 @@ namespace mvc.Controllers
         }
 
         //fetch all trip
-        public IActionResult GetAllTrip(int pagenumber = 1, int pageSize = 1)
+        public IActionResult GetAllTrip(int pagenumber = 1, int pageSize = 10)
         {
             var trips = _adminRepo.FetchAllTrip(pagenumber, pageSize);
             return Json(trips);
@@ -50,6 +50,11 @@ namespace mvc.Controllers
         [HttpPost("/UpdateTrip")]
         public IActionResult UpdateTrip(Trip updatetrip)
         {
+            var trip = _adminRepo.GetOneTrip(updatetrip.c_id);
+            if (updatetrip.c_image == null || updatetrip.c_image == "")
+            {
+                updatetrip.c_image = trip.c_image;
+            }
             _adminRepo.UpdateTrip(updatetrip);
             return Ok();
         }

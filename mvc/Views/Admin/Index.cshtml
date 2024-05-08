@@ -89,6 +89,7 @@
                     { field: "c_availableseat", title: "Available seat" },
                     { field: "c_initialseat", title: "Initial seat" },
                     { field: "c_description", title: "Description" },
+                    {command: [{text:"Edit trip",click:edittrip},{text:"delete"} ], title: "Action", width: 200}
                 ],
                 editable: "popup",
                 pageable: true,
@@ -120,15 +121,40 @@
             function AddTrip() {
                 $("#addtrip").data("kendoWindow").center().open();
             };
-
+            
             //when you click on addtrip button then call AddTrip function and open pop up
             $("#addtripbtn").kendoButton({
                 themeColor: "secondary",
             }).click(AddTrip);
+
+
+            function edittrip(e) {
+                e.preventDefault();
+                var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+                var tripid = dataItem.c_id;
+                // Open the popup window
+                $("#addtrip").data("kendoWindow").center().open();
+                
+                // Populate the form fields with trip data
+                $("#c_id").val(tripid);
+                $("input[name='c_triptype'][value='" + dataItem.c_triptype + "']").prop("checked", true);
+                $("#c_tripid").data("kendoDropDownList").value(dataItem.c_tripid);
+                $("#c_date").data("kendoDatePicker").value(dataItem.c_date);
+                $("#c_time").data("kendoTimePicker").value(dataItem.c_time);
+                $("#c_days").val(dataItem.c_days);
+                $("#c_price").val(dataItem.c_price);
+                $("#c_availableseat").val(dataItem.c_availableseat);
+                $("#c_initialseat").val(dataItem.c_initialseat);
+                $("#c_description").val(dataItem.c_description);
+                
+                // Change the button text to "Update trip"
+                $("#update").text("Update trip");
+            };
+
         });
 
-        function EditStudent() {
-            var id = $("#c_id").val();
+        function EditTrip() {
+            var id = parseInt($("#c_id").val());
             var trip = {
                 c_triptype: $("input[name='c_triptype']:checked").val(),
                 c_tripid: parseInt($("#c_tripid").val()),
@@ -141,7 +167,6 @@
                 c_initialseat: parseInt($("#c_initialseat").val()),
                 c_description: $("#c_description").val()
             };
-            console.log(trip);
             if (!id) {
                 $.ajax({
                     url: "/AddTrip",
@@ -155,8 +180,10 @@
                     }
                 });
             } else {
+                trip.c_id = id;
+
                 $.ajax({
-                    url: "/Admin/UpdateTrip/",
+                    url: "/UpdateTrip",
                     type: "POST",
                     data: trip,
                     success: function (response) {
@@ -205,7 +232,7 @@
     <div id="addtrip">
         <div>
             <div class="form-group">
-                <input type="hidden" class="form-control k-textbox" id="c_id" name="c_id">
+                <input type="text" class="form-control k-textbox" id="c_id" name="c_id">
             </div>
             <div class="form-group">
                 <label for="c_triptype">Trip type:</label>
@@ -266,7 +293,7 @@
             </div>
         </div><br>
         <div>
-            <button class="btn btn-primary" onclick="EditStudent()" id="update">Add trip</button>
+            <button class="btn btn-primary" onclick="EditTrip()" id="update">Add trip</button>
             <button class="btn btn-trans" onclick="closepopup()" id="closebtn">Close</button>
         </div>
     </div>

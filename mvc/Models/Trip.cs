@@ -13,7 +13,7 @@ namespace mvc.Models
         public string c_date{   get; set; }
         public string c_time{ get; set; }
         public int c_days{ get; set; }
-        public string c_image{ get; set; }
+        public string? c_image{ get; set; }
         public string c_price{ get; set; }
         public int c_availableseat{ get; set; }
         public int c_initialseat{ get; set; }

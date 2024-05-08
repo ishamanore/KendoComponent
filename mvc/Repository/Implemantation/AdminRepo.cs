@@ -49,10 +49,9 @@ namespace mvc.Repository.Implemantation
             }
             finally
             {
-                if (conn.State == ConnectionState.Open)
-                {
-                    conn.Close();
-                }
+
+                conn.Close();
+
             }
             return triplist;
         }

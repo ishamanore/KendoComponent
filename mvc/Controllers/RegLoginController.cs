@@ -68,6 +68,12 @@ namespace mvc.Controllers
             }
         }
 
+        public IActionResult Logout(){
+            _httpContextAccessor.HttpContext.Session.Clear();
+            return RedirectToAction("Login");
+
+        }
+
 
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

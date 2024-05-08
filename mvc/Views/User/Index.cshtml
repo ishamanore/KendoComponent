@@ -1,10 +1,282 @@
+@{
+    Layout = "~/Views/Shared/_ULayout.cshtml";
+}
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Mvc</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Mvc.styles.css" asp-append-version="true" />
+    <!-- Include Kendo UI CSS -->
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2022.1.301/styles/kendo.common.min.css">
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2022.1.301/styles/kendo.default.min.css">
 </head>
+
 <body>
-    hello user
+    <div id="example">
+        <div class="demo-section" style="width:700px">
+            <form id="wizard" style="width:500px; margin: 0 auto;" novalidate></form>
+        </div>
+
+        <!-- Include jQuery and Kendo UI library -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://kendo.cdn.telerik.com/2022.1.301/js/kendo.all.min.js"></script>
+        <!-- Include Bootstrap JS -->
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+
+        <script>
+            $(document).ready(function () {
+                $("#wizard").kendoWizard({
+                    loadOnDemand: true,
+                    reloadOnSelect: false,
+                    pager: true,
+                    done: function (e) {
+                        var fname = $("#FirstName").val();
+                        console.log(fname);
+                        e.originalEvent.preventDefault();
+                        kendo.alert("Thank you for registering!");
+                    },
+                    steps: [
+                        {
+                            title: "Personal Information",
+                            buttons: ["next"],
+                            form: {
+                                orientation: 'vertical',
+                                items: [
+                                    {
+                                        field: "FirstName",
+                                        label: "First Name",
+                                        validation: {
+                                            required: true,
+                                            custom: function (input) {
+                                                var isValid = /^[A-Za-z]+$/.test(input.val().trim());
+                                                console.log("First Name Validation:", isValid);
+                                                return isValid;
+                                            },
+                                            message: "Please enter alphabets only for the first name."
+                                        },
+                                        attributes: { type: "text" }
+                                    },
+                                    {
+                                        field: "LatName",
+                                        label: "Last Name",
+                                        validation: {
+                                            required: true,
+                                            custom: function (input) {
+                                                return /^[A-Za-z]+$/.test(input.val());
+                                            },
+                                            message: "Please enter alphabets only for the last name.",
+                                        },
+                                        attributes: { type: "text" }
+                                    },
+                                    {
+                                        field: "c_phone",
+                                        label: "Phone Number",
+                                        validation: {
+                                            required: true,
+                                        },
+                                        
+                                        hint: "Hint: enter phone number only"
+                                    },
+
+                                    {
+                                        field: "c_gender",
+                                        label: "Gender",
+                                        validation: { required: true },
+                                        editor: "RadioGroup",
+                                        editorOptions: {
+                                            items: ["Female", "Male", "Other"],
+                                            layout: "horizontal",
+                                            labelPosition: "before"
+                                        }
+                                    },
+                                    {
+                                        field: "c_address",
+                                        label: "Address",
+                                        validation: { required: true },
+                                        attributes: { type: "text" }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            title: "Trip Details",
+                            buttons: ["next"],
+                            form: {
+                                orientation: "vertical",
+                                items: [
+                                    {
+                                        field: "c_triptype",
+                                        label: "Trip Type:",
+                                        validation: { required: true },
+                                        editor: "DropDownList",
+                                        editorOptions: {
+                                            dataSource: ["International", "Domestic"],
+                                            optionLabel: "---Select Type---",
+                                            change: function () {
+                                                var type = this.value();
+                                                // Call the API to fetch trip names based on the selected trip type
+                                                $.ajax({
+                                                    url: "/User/GetTripName?type=" + type,
+                                                    dataType: "json",
+                                                    success: function (data) {
+                                                        // Set the fetched data to the c_tripid field
+                                                        var tripIdDropdown = $("#c_tripid").data("kendoDropDownList");
+                                                        tripIdDropdown.dataSource.data(data);
+                                                    },
+                                                    error: function (xhr, status, error) {
+                                                        console.error("Error fetching trip names:", error);
+                                                    }
+                                                });
+                                            }
+                                        }
+                                    },
+                                    {
+                                        field: "c_tripid",
+                                        label: "Trip Name:",
+                                        validation: { required: true },
+                                        editor: "DropDownList",
+                                        editorOptions: {
+                                            dataTextField: "c_tripname",
+                                            dataValueField: "c_tripid",
+                                            dataSource: [],
+                                            optionLabel: "---Select Trip---",
+                                            change: function () {
+                                                var name = this.value();
+                                                // Call the API to fetch trip date based on the selected trip name
+                                                $.ajax({
+                                                    url: "/User/GetTripDate?name=" + name,
+                                                    dataType: "json",
+                                                    success: function (data) {
+                                                        // Set the fetched data to the c_date field
+                                                        var tripdateDropdown = $("#c_date").data("kendoDropDownList");
+                                                        tripdateDropdown.dataSource.data(data);
+                                                    },
+                                                    error: function (xhr, status, error) {
+                                                        console.error("Error fetching trip date:", error);
+                                                    }
+                                                });
+
+                                            }
+                                        },
+                                    },
+                                    {
+                                        field: "c_date",
+                                        label: "Trip Date:",
+                                        validation: { required: true },
+                                        editor: "DropDownList",
+                                        editorOptions: {
+                                            dataSource: [],
+                                            optionLabel: "---Select Date---",
+                                            change: function (e) {
+                                                var name = $("#c_tripid").data("kendoDropDownList").value(); // Retrieve the selected trip name from the event argument
+                                                var date = this.value();
+                                                $.ajax({
+                                                    url: "/User/GetTripPrice",
+                                                    data: { "name": name, "date": date }, // Corrected syntax
+                                                    dataType: "json",
+                                                    success: function (data) {
+                                                        console.log(data);
+                                                        $("#c_price").val(data);
+                                                    },
+                                                    error: function (xhr, status, error) {
+                                                        console.error("Error fetching trip price:", error);
+                                                    }
+                                                });
+                                            }
+                                        }
+                                    },
+                                    {
+                                        field: "c_people",
+                                        label: "Total no. of members:",
+                                        validation: {
+                                            required: true,
+
+                                        },
+                                        attributes: { type: "number" },
+                                        hint: "Hint: enter numbers only"
+                                    },
+                                    {
+                                        field: "c_price",
+                                        label: "Price:",
+                                        validation: { required: true }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            title: "Payment Details",
+                            buttons: ["previous", "done"],
+                            form: {
+                                orientation: "vertical",
+                                items: [{
+                                    type: "group",
+                                    label: "Payment Details:",
+                                    layout: "grid",
+                                    grid: { cols: 3, gutter: 10 },
+                                    items: [
+                                        {
+                                            field: "c_card",
+                                            label: "Card Number:",
+                                            attributes: { "data-validmaskNumber-Msg": "Card number is incomplete" },
+                                            validation: {
+                                                required: true,
+                                                validmaskNumber: function (input) {
+                                                    if (input.is("[name='CardNumber']") && input.val() != "") {
+                                                        var maskedtextbox = input.data("kendoMaskedTextBox");
+                                                        return maskedtextbox.value().indexOf(maskedtextbox.options.promptChar) === -1;
+                                                    }
+
+                                                    return true;
+                                                }
+                                            },
+                                            editor: "MaskedTextBox",
+                                            editorOptions: { mask: "0000-0000-0000-0000" },
+                                            colSpan: 2
+                                        },
+                                        {
+                                            field: "c_csv",
+                                            label: "CSV Number:",
+                                            attributes: { "data-validmaskCSV-Msg": "CSV code is incomplete" },
+                                            validation: {
+                                                required: true,
+                                                validmaskCSV: function (input) {
+                                                    if (input.is("[name='CSVNumber']") && input.val() != "") {
+                                                        var maskedtextbox = input.data("kendoMaskedTextBox");
+                                                        return maskedtextbox.value().indexOf(maskedtextbox.options.promptChar) === -1;
+                                                    }
+
+                                                    return true;
+                                                }
+                                            },
+                                            editor: "MaskedTextBox",
+                                            editorOptions: { mask: "000" },
+                                            colSpan: 1,
+                                            hint: "The last 3 digids on the back"
+                                        },
+                                        {
+                                            field: "c_holdername",
+                                            label: "Card Holder Name:",
+                                            validation: {
+                                                required: true
+                                            },
+                                            colSpan: 3
+                                        },
+                                    ]
+                                }]
+                            }
+                        }
+                    ]
+                });
+            });
+
+
+        </script>
 </body>
+
 </html>

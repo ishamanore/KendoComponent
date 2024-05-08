@@ -9,6 +9,7 @@ namespace mvc.Repository.Implemantation
     public class CommonRepo
     {
         protected NpgsqlConnection conn;
+        protected NpgsqlConnection conn2;
 
         public CommonRepo()
         {
@@ -18,6 +19,7 @@ namespace mvc.Repository.Implemantation
             .Build();
 
             conn = new NpgsqlConnection(configuration.GetConnectionString("connection"));
+            conn2 = new NpgsqlConnection(configuration.GetConnectionString("connection"));
         }
 
         

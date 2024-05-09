@@ -54,6 +54,63 @@ namespace mvc.Repository.Implemantation
             return triplist;
         }
 
+        List<Trip> IAdminRepo.searchTrip(string search)
+        {
+            var triplist = new List<Trip>();
+            try
+            {
+                conn3.Open();
+                // Define the SQL query with parameters for dynamic searching
+                string queryString = @"
+                    SELECT t.c_id, t.c_triptype, t.c_tripid, t.c_date, t.c_time, t.c_days, t.c_image, t.c_price, t.c_availableseat, t.c_initialseat, t.c_description, n.c_tripname 
+                    FROM public.t_trip t 
+                    INNER JOIN t_tripnames n ON t.c_tripid = n.c_tripid 
+                    WHERE t.c_triptype LIKE @Search 
+                        OR t.c_date LIKE @Search 
+                        OR t.c_time LIKE @Search 
+                        OR CAST(t.c_days AS TEXT) LIKE @Search 
+                        OR t.c_price LIKE @Search 
+                        OR CAST(t.c_availableseat AS TEXT) LIKE @Search 
+                        OR CAST(t.c_initialseat AS TEXT) LIKE @Search 
+                        OR t.c_description LIKE @Search 
+                        OR n.c_tripname LIKE @Search
+                    ORDER BY t.c_id;";
+                using var cmd = new NpgsqlCommand(queryString, conn3);
+                // Set the parameter value
+                cmd.Parameters.AddWithValue("@Search", $"%{search}%");
+                using var reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    Trip trip = new Trip()
+                    {
+                        c_id = Convert.ToInt32(reader["c_id"]),
+                        c_triptype = reader["c_triptype"].ToString(),
+                        c_tripid = Convert.ToInt32(reader["c_tripid"]),
+                        c_date = reader["c_date"].ToString(),
+                        c_time = reader["c_time"].ToString(),
+                        c_days = Convert.ToInt32(reader["c_days"]),
+                        c_image = reader["c_image"].ToString(),
+                        c_price = reader["c_price"].ToString(),
+                        c_availableseat = Convert.ToInt32(reader["c_availableseat"]),
+                        c_initialseat = Convert.ToInt32(reader["c_initialseat"]),
+                        c_description = reader["c_description"].ToString(),
+                        c_tripname = reader["c_tripname"].ToString(),
+                    };
+                    triplist.Add(trip);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+            finally
+            {
+                conn3.Close();
+            }
+            return triplist;
+        }
+
+
         public Trip GetOneTrip(int id)
         {
             Trip trip = new Trip();
@@ -194,6 +251,7 @@ namespace mvc.Repository.Implemantation
             }
             return triplist;
         }
+
 
     }
 }

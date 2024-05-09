@@ -17,9 +17,9 @@ namespace mvc.Repository.Implemantation
             var triplist = new List<Trip>();
             try
             {
-                conn.Open();
+                conn2.Open();
                 int offset = (pagenumber - 1) * pageSize;
-                using var cmd = new NpgsqlCommand("SELECT t.c_id, t.c_triptype, t.c_tripid, t.c_date, t.c_time, t.c_days, t.c_image, t.c_price, t.c_availableseat, t.c_initialseat, t.c_description , n.c_tripname FROM public.t_trip t inner join t_tripnames n on t.c_tripid = n.c_tripid ORDER BY t.c_id LIMIT @PageSize OFFSET @Offset", conn);
+                using var cmd = new NpgsqlCommand("SELECT t.c_id, t.c_triptype, t.c_tripid, t.c_date, t.c_time, t.c_days, t.c_image, t.c_price, t.c_availableseat, t.c_initialseat, t.c_description , n.c_tripname FROM public.t_trip t inner join t_tripnames n on t.c_tripid = n.c_tripid ORDER BY t.c_id LIMIT @PageSize OFFSET @Offset", conn2);
                 cmd.Parameters.AddWithValue("@PageSize", pageSize);
                 cmd.Parameters.AddWithValue("@Offset", offset);
                 using var reader = cmd.ExecuteReader();
@@ -49,10 +49,7 @@ namespace mvc.Repository.Implemantation
             }
             finally
             {
-                if (conn.State == ConnectionState.Open)
-                {
-                    conn.Close();
-                }
+                conn2.Close();
             }
             return triplist;
         }

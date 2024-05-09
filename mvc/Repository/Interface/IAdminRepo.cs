@@ -16,5 +16,7 @@ namespace mvc.Repository.Interface
         List<TripNames> FetchAllTripNames();
 
         List<Trip> searchTrip(string search); 
+
+        List<ShowAllBookTcket> GetAllBookTicket();
     }
 }

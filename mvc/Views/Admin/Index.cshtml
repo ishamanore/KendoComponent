@@ -153,6 +153,10 @@
                 $("#admingrid").kendoGrid({
                     dataSource: dataSource,
                     columns: [
+                        {
+                          selectable : true,
+                          width : "45px"  
+                        },
                         { field: "c_id", title: "Id", hidden: true },
                         { field: "c_triptype", title: "Type", width: 120 },
                         { field: "c_tripname", title: "Name", width: 120 },

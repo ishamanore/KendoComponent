@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,30 +8,57 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Mvc.styles.css" asp-append-version="true" />
-    
+    <style>
+        #loader-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(153, 61, 107, 0.5);
+            z-index: 9999;
+        }
+
+        #loader-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10000;
+        }
+
+        #loader-small {}
+    </style>
 </head>
+
 <body>
+    <div id="loader-overlay"></div> <!-- Overlay for background -->
+    <div id="loader-container">
+        <div id="loader-small"></div> <!-- Kendo UI Loader -->
+    </div>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Mvc</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                       
-                        
+
+
                     </ul>
                     <ul class="navbar-nav navbar-right">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="RegLogin" asp-action="Logout">Logout</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="RegLogin"
+                                asp-action="Logout">Logout</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Logout">Logout</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="User"
+                                asp-action="Logout">Logout</a>
                         </li>
-                        
+
                     </ul>
                 </div>
             </div>
@@ -41,11 +69,25 @@
             @RenderBody()
         </main>
     </div>
+    <script>
+        $(document).ready(function (){
+            var smallLoader = $('#loader-small').kendoLoader({
+                size: 'large'
+            }).data("kendoLoader");
 
-    
+            setTimeout(function () {
+                $('#loader-overlay, #loader-container').fadeOut(500, function () {
+                    $(this).remove();
+                });
+            }, 1000);
+        })
+    </script>
+
+
     @* <script src="~/lib/jquery/dist/jquery.min.js"></script> *@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
+
 </html>

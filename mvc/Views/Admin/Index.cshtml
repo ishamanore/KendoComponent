@@ -15,6 +15,37 @@
     <script src="https://unpkg.com/pako/dist/pako_deflate.min.js"></script>
     <script src="/js/popupvelidetion.js"> </script>
     <title>Document</title>
+    <style>
+        #openActionSheetBttn {
+        margin: 0 auto;
+        display: block;
+    }
+    .demo-view {
+        transform: scale(1);
+        overflow: hidden;
+    }
+    .k-actionsheet-container {
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+    }
+
+    .k-actionsheet-container > .k-overlay {
+        border-bottom-left-radius: 30px;
+        border-bottom-right-radius: 30px;
+    }
+
+    .cards-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .k-card {
+        width: 285px;
+        margin: 5%;
+    }
+    </style>
 
     <script>
         var pageNumber = 1;
@@ -71,9 +102,7 @@
             }).data("kendoWindow");
 
             //this "addtrip" id is form id(open when click on add trip btn)
-            function AddTrip() {
-                $("#addtrip").data("kendoWindow").center().open();
-            };
+            
 
             //when you click on addtrip button then call AddTrip function and open pop up
             $("#addtripbtn").kendoButton({
@@ -173,8 +202,9 @@
                 sortable: true,
                 filterable: true,
                 resizeable: true,
-                toolbar: [{ template: "<input type='text' class='k-textbox' id='search' onkeyup='search()' placeholder='Search...' /><button id='addtripbtn'>Add Trip</button>" }, { template: "<button id='deletetrip'>delete Trip</button>" }, "excel"],
+                toolbar: [{ template: "<input type='text' class='k-textbox' id='search' onkeyup='search()' placeholder='Search...' /><button id='addtripbtn'>Add Trip</button>" }, { template: "<button id='deletetrip'>delete Trip</button>" },"pdf", "excel"],
                 excel: { fileName: "alltrip.xlsx" },
+                pdf: { fileName: "alltrip.pdf" },
                 dataBound: function () {
                     var footer = this.element.find(".k-grid-footer");
                     if (!footer.length) {
@@ -211,6 +241,11 @@
                 loadTrip(pageNumber, pageSize);
             }
         }
+
+        function AddTrip() {
+                $("#addtrip").data("kendoWindow").center().open();
+                actionsheet.close();
+            };
 
         function editVelidetion() {
             if (validation()) {
@@ -405,6 +440,57 @@
             <button class="btn btn-trans" onclick="closepopup()" id="closebtn">Close</button>
         </div>
     </div>
-</body>
 
+    <div id="example">
+    <div class="demo-section wide">
+        <div class="demo-app" style="position:relative">
+                <button id="openActionSheetBttn">OPEN ACTION SHEET</button>
+                <div id="actionsheet"></div>
+        </div>
+    </div>
+</body>
+    <script>
+        $(document).ready(function () {
+            var actionsheet = $('#actionsheet').kendoActionSheet({
+                title: 'Select item',
+                items: [
+                    {
+                        text: 'Add New Trip',
+                        iconClass: 'k-i-upload',
+                        click: AddTrip
+                    },
+                    {
+                        text: 'Delete',
+                        iconClass: 'k-i-delete',
+                        group: 'bottom',
+                        click: DeleteMultiple
+                    },
+                    {
+                        text: 'Cancel',
+                        iconClass: 'k-i-cancel',
+                        group: 'bottom',
+                        click: onClick
+                    },
+                ]
+            }).data('kendoActionSheet');
+
+        $("#openActionSheetBttn").kendoButton({
+                themeColor: "primary",
+                click: function (e) {
+                    actionsheet.open()
+                }
+            });
+        
+        function onClick(e) {
+                e.preventDefault();
+                actionsheet.close();
+            }
+
+
+
+        });
+
+
+        
+    </script>
 </html>

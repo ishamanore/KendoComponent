@@ -288,5 +288,53 @@ namespace mvc.Repository.Implemantation
             }
             return tickets;
         }
+
+        int IAdminRepo.TotalInternational()
+        {
+            try
+            {
+                conn.Open();
+                NpgsqlCommand cmd = new NpgsqlCommand("select count(c_triptype) from t_trip where c_triptype='international';", conn);
+                NpgsqlDataReader dr = cmd.ExecuteReader();
+                dr.Read();
+                int international = Convert.ToInt32(dr["count"]);
+                return international;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error while getting international : " + ex.Message);
+                return 0;
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
+
+        int IAdminRepo.TotalDomestic()
+        {
+            try
+            {
+                conn2.Open();
+                NpgsqlCommand cmd = new NpgsqlCommand("select count(c_triptype) from t_trip where c_triptype='domestic';", conn2);
+                NpgsqlDataReader dr = cmd.ExecuteReader();
+                dr.Read();
+                int domestic = Convert.ToInt32(dr["count"]);
+                return domestic;
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine("error while getting domestic : " + ex.Message);
+                return 0;
+            }
+            finally
+            {
+                conn2.Close();
+            }
+        }
     }
+
+
+
 }

@@ -54,7 +54,7 @@ namespace mvc.Controllers
                 string role = _httpContextAccessor.HttpContext.Session.GetString("role");
                 if (role.Equals("admin"))
                 {
-                    return RedirectToAction("Index", "Admin");
+                    return RedirectToAction("Dashboard", "Admin");
                 }
                 else
                 {

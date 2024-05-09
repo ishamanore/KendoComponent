@@ -18,5 +18,9 @@ namespace mvc.Repository.Interface
         List<Trip> searchTrip(string search); 
 
         List<ShowAllBookTcket> GetAllBookTicket();
+
+        int TotalInternational();
+
+        int TotalDomestic();
     }
 }

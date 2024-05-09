@@ -104,6 +104,19 @@ namespace mvc.Controllers
             return Ok(searchTrip);
         }
 
+
+        [HttpGet]
+        public IEnumerable<int> tripType()
+        {
+            int international = _adminRepo.TotalInternational();
+            int domestic = _adminRepo.TotalDomestic();
+            return new int[] { international,domestic };
+        }
+
+        public IActionResult Dashboard(){
+            return View();
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

@@ -1,0 +1,112 @@
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<script src="Kendo/jquery.min.js"></script>
+<script src="Kendo/kendo.all.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+<style>
+    /*.square {
+        height: 50px;
+        width: 50px;
+        background-color: #555;
+    }*/
+    #main {
+        display: none;
+        align-items: center;
+        margin: auto;
+        width: 62%;
+    }
+
+    #main1 {
+        display: none;
+        align-items: center;
+        margin-left: 5px;
+    }
+
+    .square {
+        height: 12px;
+        width: 12px;
+        margin: 5px 0px 5px 15px;
+        border-radius: 2%;
+    }
+
+    .indicator {
+        margin: 10px;
+        letter-spacing: 1px;
+        color: black;
+    }
+
+    .uprmain {
+        margin-left: auto;
+        margin-right: auto;
+        width: 79%;
+    }
+
+    .inner {
+        margin: 6px 40px;
+    }
+
+    .secdiv {
+        margin: auto;
+        width: 50%;
+    }
+</style>
+
+
+<html>
+
+<body>
+    <div style="display:flex" class="uprmain">
+        <div class="inner">
+            <canvas id="myChart1" style="width:100%;"></canvas>
+        </div>
+
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            FetchTripType();
+
+        });
+        function FetchTripType() {
+
+            var settings = {
+                "url": "/Admin/tripType",
+                "method": "GET",
+                "timeout": 0,
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+            }
+            $.ajax(settings).done(function (response) {
+                var xValues = ["International", "Domestic"];
+                var yValues = [response[0], response[1]];
+                var barColors = [
+                    "#c25893",
+                    "#dba3c2",
+
+                ];
+
+                new Chart("myChart1", {
+                    type: "pie",
+                    data: {
+                        labels: xValues,
+                        datasets: [{
+                            backgroundColor: barColors,
+                            data: yValues
+                        }]
+                    },
+                    options: {
+                        title: {
+                            display: false,
+                            text: "Trip Type"
+                        }
+                    }
+                });
+
+            });
+        }
+    </script>
+</body>
+
+</html>

@@ -58,7 +58,7 @@ namespace mvc.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("Index", "User");
+                    return RedirectToAction("Dashboard", "User");
                 }
             }
             else

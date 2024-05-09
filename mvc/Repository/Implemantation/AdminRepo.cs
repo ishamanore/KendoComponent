@@ -122,8 +122,8 @@ namespace mvc.Repository.Implemantation
         {
             try
             {
-                conn.Open();
-                using var cmd = new NpgsqlCommand("UPDATE public.t_trip SET c_triptype=@c_triptype, c_tripid=@c_tripid, c_date=@c_date, c_time=@c_time, c_days=@c_days, c_image=@c_image, c_price=@c_price, c_availableseat=@c_availableseat, c_initialseat=@c_initialseat, c_description=@c_description WHERE c_id = @c_id", conn);
+                conn2.Open();
+                using var cmd = new NpgsqlCommand("UPDATE public.t_trip SET c_triptype=@c_triptype, c_tripid=@c_tripid, c_date=@c_date, c_time=@c_time, c_days=@c_days, c_image=@c_image, c_price=@c_price, c_availableseat=@c_availableseat, c_initialseat=@c_initialseat, c_description=@c_description WHERE c_id = @c_id", conn2);
                 cmd.Parameters.AddWithValue("@c_id", trip.c_id);
                 cmd.Parameters.AddWithValue("@c_triptype", trip.c_triptype);
                 cmd.Parameters.AddWithValue("@c_tripid", trip.c_tripid);
@@ -143,7 +143,7 @@ namespace mvc.Repository.Implemantation
             }
             finally
             {
-                conn.Close();
+                conn2.Close();
             }
         }
 
@@ -152,8 +152,8 @@ namespace mvc.Repository.Implemantation
             try
             {
                 conn.Open();
-                using var cmd = new NpgsqlCommand("", conn);
-                cmd.Parameters.AddWithValue("@", id);
+                using var cmd = new NpgsqlCommand("DELETE FROM public.t_trip WHERE c_id = @c_id", conn);
+                cmd.Parameters.AddWithValue("@c_id", id);
                 cmd.ExecuteNonQuery();
             }
             catch (Exception ex)

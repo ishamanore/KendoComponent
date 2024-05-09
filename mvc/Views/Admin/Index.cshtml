@@ -153,7 +153,7 @@
             function AddTrip() {
                 $("#addtrip").data("kendoWindow").center().open();
             };
-
+            
             //when you click on addtrip button then call AddTrip function and open pop up
             $("#addtripbtn").kendoButton({
                 themeColor: "secondary",
@@ -176,7 +176,6 @@
                 c_initialseat: parseInt($("#c_initialseat").val()),
                 c_description: $("#c_description").val()
             };
-            console.log(trip);
             if (!id) {
                 $.ajax({
                     url: "/AddTrip",
@@ -190,8 +189,10 @@
                     }
                 });
             } else {
+                trip.c_id = id;
+
                 $.ajax({
-                    url: "/Admin/UpdateTrip/",
+                    url: "/UpdateTrip",
                     type: "POST",
                     data: trip,
                     success: function (response) {
@@ -228,6 +229,43 @@
             });
         }
 
+
+        async function DeleteMultiple() {
+                var grid = $("#admingrid").data('kendoGrid');
+                var rows = grid.select();
+                var ids = [];
+                var i = 0;
+                rows.each(function () {
+                    ids[i] = grid.dataItem(this).c_id;
+                    i++;
+                });
+                ids.forEach(function (id) {
+                    console.log(id);
+                });
+                if (i == 0) {
+                    alert("please select atleast one student");
+                }
+                else {
+                    for (var d = 0; d < ids.length; d++) {
+                        await $.ajax({
+                            url:"/Admin/DeleteTrip/"+ids[d],
+                            type: 'DELETE',
+                            success: function () {
+                                console.log("Deleted");
+                            },
+                            error: function (error) {
+                                console.log("Error while deleting: " + error);
+                            }
+                        });
+                        await sleep(100);
+                    }
+                    window.location.reload();
+                }
+            }
+            function sleep(ms) {
+                return new Promise(resolve => setTimeout(resolve, ms));
+            }
+
     </script>
 
 
@@ -235,6 +273,14 @@
 </head>
 
 <body>
+    <div class="container">
+        <div class="table">
+            <div class="row">
+                <div class="col-sm-3"><button class="" onclick="DeleteMultiple()">Delete Student</button></div>
+            </div>
+        </div>
+
+    </div>
     <div id="admingrid"></div>
     <button id="preButton">Pre</button>
     <button id="nextButton">Next</button>
@@ -242,7 +288,7 @@
     <div id="addtrip">
         <div>
             <div class="form-group">
-                <input type="hidden" class="form-control k-textbox" id="c_id" name="c_id">
+                <input type="text" class="form-control k-textbox" id="c_id" name="c_id">
             </div>
             <div class="form-group">
                 <label for="c_triptype">Trip type:</label>
@@ -303,7 +349,7 @@
             </div>
         </div><br>
         <div>
-            <button class="btn btn-primary" onclick="EditStudent()" id="update">Add trip</button>
+            <button class="btn btn-primary" onclick="EditTrip()" id="update">Add trip</button>
             <button class="btn btn-trans" onclick="closepopup()" id="closebtn">Close</button>
         </div>
     </div>

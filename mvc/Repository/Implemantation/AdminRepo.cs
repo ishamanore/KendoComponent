@@ -195,5 +195,41 @@ namespace mvc.Repository.Implemantation
             return triplist;
         }
 
+
+
+        public List<ShowAllBookTcket> GetAllBookTicket()
+        {
+            var tickets = new List<ShowAllBookTcket>();
+            try
+            {
+                conn.Open();
+                var cmd = new NpgsqlCommand("select u.c_username , t.c_userid, t.c_tripid , t.c_registerid, t.c_tridate , t.c_totalpeople , t.c_totalprice , n.c_tripname from t_reglogin u inner join t_register_trip t on u.c_id = t.c_userid  inner join t_tripnames n on t.c_tripid = n.c_tripid", conn);
+                var reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    var ticket = new ShowAllBookTcket
+                    {
+                        c_username = reader.GetString(0),
+                        c_userid = reader.GetInt32(1),
+                        c_tripid = reader.GetInt32(2),
+                        c_registerid = reader.GetInt32(3),
+                        c_tripdate = reader.GetString(4),
+                        c_totalpeople = reader.GetInt32(5),
+                        c_totalprice = reader.GetDouble(6),
+                        c_tripname = reader.GetString(7),
+                    };
+                    tickets.Add(ticket);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return tickets;
+        }
     }
 }

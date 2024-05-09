@@ -87,6 +87,16 @@ namespace mvc.Controllers
             return Ok();
         }
 
+        public IActionResult ShowAllBookTicket()
+        {
+            return View();
+        }
+
+        public IActionResult FetchAllTicket()
+        {
+            var ticket = _adminRepo.GetAllBookTicket();
+            return Ok(ticket);
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

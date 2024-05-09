@@ -14,5 +14,6 @@ namespace mvc.Repository.Interface
         void UpdateTrip(Trip trip);
         void DeleteTrip(int id);
         List<TripNames> FetchAllTripNames();
+        List<ShowAllBookTcket> GetAllBookTicket();
     }
 }

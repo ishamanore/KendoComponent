@@ -4,8 +4,8 @@ function username() {
   if (username.length >= 3) {
     document.getElementById("username").innerText = "";
     return true;
-  } else if (username == "" && username == null) {
-    document.getElementById("username").innerText = "Please eneter username";
+  } else if (username.trim() === "") {
+    document.getElementById("username").innerText = "Please enter username";
     return false;
   } else {
     document.getElementById("username").innerText =

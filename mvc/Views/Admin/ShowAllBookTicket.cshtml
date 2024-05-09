@@ -23,28 +23,27 @@
 
         <script>
             $(document).ready(function () {
-
                 $("#treelist").kendoTreeList({
                     dataSource: {
                         transport: {
                             read: {
-                                url: "/Admin/FetchAllTicket/",
+                                url: "/Admin/FetchAllTicket",
                                 dataType: "json"
                             }
                         },
                         schema: {
                             model: {
                                 id: "c_registerid",
-                                parentId: "c_username",
+                                parentId: "c_userid",
                                 fields: {
-                                    c_registerid: { field: "c_registerid", type: "number" },
-                                    c_username: { field: "c_username", type: "string" },
-                                    c_tripname: { field: "c_tripname", type: "string" },
-                                    c_tripdate: { field: "c_tripdate", type: "string" },
-                                    c_totalpeople: { field: "c_totalpeople", type: "number" },
-                                    c_totalPrice: { field: "c_totalPrice", type: "double" },
-                                },
-                                expanded: true
+                                    c_registerid: { type: "number" },
+                                    c_userid: { field: "c_userid", type: "number" }, // Parent ID
+                                    c_username: { type: "string" },
+                                    c_tripname: { type: "string" },
+                                    c_tripdate: { type: "string" },
+                                    c_totalpeople: { type: "number" },
+                                    c_totalprice: { type: "number" }
+                                }
                             }
                         }
                     },
@@ -57,13 +56,11 @@
                         { field: "c_tripname", title: "Trip name" },
                         { field: "c_tripdate", title: "Trip date" },
                         { field: "c_totalpeople", title: "Total people" },
-                        { field: "c_totalPrice", title: "Total amount" },
+                        { field: "c_totalprice", title: "Total amount" }
                     ],
-                    pageable: {
-                        pageSize: 15,
-                        pageSizes: true
-                    }
                 });
+
+
             });
         </script>
     </div>

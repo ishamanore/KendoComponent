@@ -98,6 +98,12 @@ namespace mvc.Controllers
             return Ok(ticket);
         }
 
+        [HttpPost]
+        public IActionResult search(string search){
+            var searchTrip = _adminRepo.searchTrip(search);
+            return Ok(searchTrip);
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

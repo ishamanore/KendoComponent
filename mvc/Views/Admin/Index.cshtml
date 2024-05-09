@@ -95,26 +95,18 @@
                         { field: "c_description", title: "Description" },
                     ],
                     editable: "popup",
-                    pageable: {
-                        pageSizes: true,
-                        buttonCount: 5 // Adjust button count as per your requirement
-                    },
                     sortable: true,
                     filterable: true,
                     resizeable: true,
                     toolbar: [{ template: "<button id='addtripbtn'>Add Trip</button>" }, "search", "excel"],
                     search: { fields: ["c_triptype", "c_tripname", "c_date", "c_time", "c_days", "c_price", "c_availableseat", "c_initialseat", "c_description"] },
                     excel: { fileName: "alltrip.xlsx" },
-                    dataBound: function () {
-                        $(document).on('click', '#admingrid .k-pager-nav', function (e) {
-                            e.preventDefault();
-                            var target = $(e.target);
-                            if (!target.hasClass('k-state-disabled')) {
-                                var pageNum = parseInt(target.attr('aria-label'));
-                                console.log(target);
-                                loadTrip(pageNum, pageSize);
-                            }
-                        });
+                    dataBound: function() {
+                        // Custom footer content or functionality
+                        var footer = this.element.find(".k-grid-footer");
+                        if (!footer.length) {
+                            this.element.append("<div class='k-grid-footer'>Footer Content Here</div>");
+                        }
                     }
                 });
             }

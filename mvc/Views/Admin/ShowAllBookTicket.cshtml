@@ -4,10 +4,14 @@
 
 <head>
     <title></title>
-    <link href="https://kendo.cdn.telerik.com/themes/7.2.1/default/default-main.css" rel="stylesheet" />
+    <link href="https://kendo.cdn.telerik.com/2023.1.117/styles/kendo.default.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-
-    <script src="js/kendo.all.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://kendo.cdn.telerik.com/2023.1.117/js/kendo.all.min.js"></script>
+    <script src="https://unpkg.com/jszip/dist/jszip.min.js"></script>
+    <script src="https://unpkg.com/pako/dist/pako_deflate.min.js"></script>
+    @* <script src="js/kendo.all.min.js"></script> *@
 </head>
 
 <body>
@@ -19,48 +23,47 @@
 
         <script>
             $(document).ready(function () {
-            @* var service = "https://demos.telerik.com/kendo-ui/service"; *@
 
-                    $("#treelist").kendoTreeList({
-                        dataSource: {
-                            transport: {
-                                read: {
-                                    url: "/Admin/FetchAllTicket/",
-                                    dataType: "json"
-                                }
-                            },
-                            schema: {
-                                model: {
-                                    id: "c_registerid",
-                                    parentId: "c_username",
-                                    fields: {
-                                        c_registerid: { field: "c_registerid", type: "number" },
-                                        c_username: { field: "c_username", type: "string" },
-                                        c_tripname: { field: "c_tripname", type: "string" },
-                                        c_tripdate: { field: "c_tripdate", type: "string" },
-                                        c_totalpeople: { field: "c_totalpeople", type: "number" },
-                                        c_totalPrice: { field: "c_totalPrice", type: "float" }, 
-                                    },
-                                    expanded: true
-                                }
+                $("#treelist").kendoTreeList({
+                    dataSource: {
+                        transport: {
+                            read: {
+                                url: "/Admin/FetchAllTicket/",
+                                dataType: "json"
                             }
                         },
-                        height: 540,
-                        filterable: true,
-                        sortable: true,
-                        columns: [
-                            { field: "c_username", title: "User name" },
-                            { field: "c_registerid", title: "Register id", hidden: true },
-                            { field: "c_tripname", title: "Trip name" },
-                            { field: "c_tripdate", title: "Trip date" },
-                            { field: "c_totalpeople", title: "Total people" },
-                            { field: "c_totalPrice", title: "Total amount" },
-                        ],
-                        pageable: {
-                            pageSize: 15,
-                            pageSizes: true
+                        schema: {
+                            model: {
+                                id: "c_registerid",
+                                parentId: "c_username",
+                                fields: {
+                                    c_registerid: { field: "c_registerid", type: "number" },
+                                    c_username: { field: "c_username", type: "string" },
+                                    c_tripname: { field: "c_tripname", type: "string" },
+                                    c_tripdate: { field: "c_tripdate", type: "string" },
+                                    c_totalpeople: { field: "c_totalpeople", type: "number" },
+                                    c_totalPrice: { field: "c_totalPrice", type: "double" },
+                                },
+                                expanded: true
+                            }
                         }
-                    });
+                    },
+                    height: 540,
+                    filterable: true,
+                    sortable: true,
+                    columns: [
+                        { field: "c_username", title: "User name" },
+                        { field: "c_registerid", title: "Register id", hidden: true },
+                        { field: "c_tripname", title: "Trip name" },
+                        { field: "c_tripdate", title: "Trip date" },
+                        { field: "c_totalpeople", title: "Total people" },
+                        { field: "c_totalPrice", title: "Total amount" },
+                    ],
+                    pageable: {
+                        pageSize: 15,
+                        pageSizes: true
+                    }
+                });
             });
         </script>
     </div>

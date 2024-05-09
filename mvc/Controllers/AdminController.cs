@@ -87,13 +87,16 @@ namespace mvc.Controllers
             return Ok();
         }
 
-        [HttpPost]
-        public IActionResult Search(string search)
+        public IActionResult ShowAllBookTicket()
         {
-            var searchTrip = _adminRepo.searchTrip(search);
-            return Ok(searchTrip);
+            return View();
         }
 
+        public IActionResult FetchAllTicket()
+        {
+            var ticket = _adminRepo.GetAllBookTicket();
+            return Ok(ticket);
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

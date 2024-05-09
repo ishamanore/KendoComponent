@@ -1,5 +1,7 @@
 <html lang="en">
-
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,7 +13,7 @@
     <script src="https://kendo.cdn.telerik.com/2023.1.117/js/kendo.all.min.js"></script>
     <script src="https://unpkg.com/jszip/dist/jszip.min.js"></script>
     <script src="https://unpkg.com/pako/dist/pako_deflate.min.js"></script>
-
+    <script src="/js/popupvelidetion.js"> </script>
     <title>Document</title>
 
     <script>
@@ -210,6 +212,11 @@
             }
         }
 
+        function editVelidetion() {
+            if (validation()) {
+                EditTrip();
+            }
+        }
 
         function EditTrip() {
             var id = parseInt($("#c_id").val());
@@ -230,10 +237,10 @@
                     url: "/AddTrip",
                     type: "POST",
                     data: trip,
-                    success: function (response) {
+                    success: function(response) {
                         window.location.reload();
                     },
-                    error: function (error) {
+                    error: function(error) {
                         console.log("error while adding data: " + error);
                     }
                 });
@@ -244,17 +251,15 @@
                     url: "/UpdateTrip",
                     type: "POST",
                     data: trip,
-                    success: function (response) {
+                    success: function(response) {
                         window.location.reload();
                     },
-                    error: function (error) {
+                    error: function(error) {
                         console.log("error while adding data: " + error);
                     }
                 });
             }
         }
-
-
         function imageNameChange(e) {
             $.each(e.target.files, function (index, value) {
                 var fileNameWithName = "/images/" + value.name;
@@ -350,43 +355,43 @@
                 <select name="c_tripid" id="c_tripid" class="form-control">
                     <option value="">--select trip--</option>
                 </select>
-                <span style="font-size:small" id="errorage"></span>
+                <span style="font-size:small" id="errorname"></span>
             </div>
             <div class="form-group">
                 <label for="c_date">Select date:</label>
                 <input type="date" id="c_date" name="c_date" class="form-control k-date">
-                <span style="font-size:small" id="errorgender"></span>
+                <span style="font-size:small" id="errordate"></span>
             </div>
             <div class="form-group">
                 <label for="c_time">Trip time:</label>
                 <input type="time" id="c_time" style="width: 50%" class="form-control" name="c_time">
-                <span style="font-size:small" id="errordob"></span>
+                <span style="font-size:small" id="errortime"></span>
             </div>
             <div class="form-group">
                 <label for="c_days">In how many days trip will arrive:</label>
                 <input type="number" id="c_days" name="c_days" class="form-control">
-                <span style="font-size:small" id="errordept"></span>
+                <span style="font-size:small" id="errordays"></span>
             </div>
             <div class="form-group">
                 <label for="c_image">Upload image:</label>
                 <input type="file" id="photo" name="photo" class="form-control" onchange="imageNameChange(event);">
                 <input type="hidden" name="c_image" id="c_image">
-                <span style="font-size:small" id="errorinterest"></span>
+                <span style="font-size:small" id="errorphoto"></span>
             </div>
             <div class="form-group">
                 <label for="c_price">Trip price:</label>
                 <input type="number" id="c_price" name="c_price" class="form-control">
-                <span style="font-size:small" id="errordept"></span>
+                <span style="font-size:small" id="errorprice"></span>
             </div>
             <div class="form-group">
                 <label for="c_availableseat">Available seat:</label>
                 <input type="number" id="c_availableseat" name="c_availableseat" class="form-control">
-                <span style="font-size:small" id="errordept"></span>
+                <span style="font-size:small" id="erroravailableseat"></span>
             </div>
             <div class="form-group">
                 <label for="c_days">Initial seat:</label>
                 <input type="number" id="c_initialseat" name="c_initialseat" class="form-control">
-                <span style="font-size:small" id="errordept"></span>
+                <span style="font-size:small" id="errorinitialseat"></span>
             </div>
             <div class="form-group">
                 <label for="c_description">Trip description:</label>
@@ -396,7 +401,7 @@
             </div>
         </div><br>
         <div>
-            <button class="btn btn-primary" onclick="EditTrip()" id="update">Add trip</button>
+            <button class="btn btn-primary" onclick="editVelidetion()" id="update">Add trip</button>
             <button class="btn btn-trans" onclick="closepopup()" id="closebtn">Close</button>
         </div>
     </div>

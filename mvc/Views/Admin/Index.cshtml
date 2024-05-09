@@ -46,93 +46,62 @@
                 themeColor: "error",
             });
 
-            var pageNumber = 1;
-            var pageSize = 1;
+            var dataSource = new kendo.data.DataSource({
+                transport: {
+                    read: {
+                        url: "/Admin/GetAllTrip/",
+                        dataType: "json",
 
-            function loadTrip(pageNum, pageSize) {
-                var dataSource = new kendo.data.DataSource({
-                    transport: {
-                        read: {
-                            url: "/Admin/GetAllTrip/",
-                            dataType: "json",
-                            data: { pageNumber: pageNum, pageSize: pageSize },
-                        },
                     },
-                    schema: {
-                        model: {
-                            id: "c_id",
-                            fields: {
-                                c_id: { type: "number" },
-                                c_triptype: { type: "string" },
-                                c_tripname: { type: "string" },
-                                c_date: { type: "string" },
-                                c_time: { type: "string" },
-                                c_days: { type: "number" },
-                                c_image: { type: "string" },
-                                c_price: { type: "string" },
-                                c_availableseat: { type: "number" },
-                                c_initialseat: { type: "number" },
-                                c_description: { type: "string" },
-                            }
+                },
+                serverPaging: true,
+                schema: {
+                    model: {
+                        id: "c_id",
+                        fields: {
+                            c_id: { type: "number" },
+                            c_triptype: { type: "string" },
+                            c_tripname: { type: "string" },
+                            c_date: { type: "string" },
+                            c_time: { type: "string" },
+                            c_days: { type: "number" },
+                            c_image: { type: "string" },
+                            c_price: { type: "string" },
+                            c_availableseat: { type: "number" },
+                            c_initialseat: { type: "number" },
+                            c_description: { type: "string" },
                         }
-                    },
-                });
-
-
-                $("#admingrid").kendoGrid({
-                    dataSource: dataSource,
-                    columns: [
-                        { field: "c_id", title: "Id", hidden: true },
-                        { field: "c_triptype", title: "Type", width: 120 },
-                        { field: "c_tripname", title: "Name", width: 120 },
-                        { field: "c_date", title: "Date" },
-                        { field: "c_time", title: "Time" },
-                        { field: "c_days", title: "Days" },
-                        { field: "c_image", title: "Image", template: '<img src="#= c_image #" alt="#= c_image #" style= "border-radius:20%; width:30px; height:30px"></img>' },
-                        { field: "c_price", title: "Price" },
-                        { field: "c_availableseat", title: "Available seat" },
-                        { field: "c_initialseat", title: "Initial seat" },
-                        { field: "c_description", title: "Description" },
-                    ],
-                    editable: "popup",
-                    pageable: {
-                        pageSizes: true,
-                        buttonCount: 5 // Adjust button count as per your requirement
-                    },
-                    sortable: true,
-                    filterable: true,
-                    resizeable: true,
-                    toolbar: [{ template: "<button id='addtripbtn'>Add Trip</button>" }, "search", "excel"],
-                    search: { fields: ["c_triptype", "c_tripname", "c_date", "c_time", "c_days", "c_price", "c_availableseat", "c_initialseat", "c_description"] },
-                    excel: { fileName: "alltrip.xlsx" },
-                    dataBound: function () {
-                        $(document).on('click', '#admingrid .k-pager-nav', function (e) {
-                            e.preventDefault();
-                            var target = $(e.target);
-                            if (!target.hasClass('k-state-disabled')) {
-                                var pageNum = parseInt(target.attr('aria-label'));
-                                console.log(target);
-                                loadTrip(pageNum, pageSize);
-                            }
-                        });
                     }
-                });
-            }
-
-            // Load initial data
-            loadTrip(pageNumber, pageSize);
-
-            $('#preButton').on('click', function () {
-                if (pageNumber > 1) {
-                    pageNumber--;
-                    loadTrip(pageNumber, pageSize);
-                }
+                },
             });
 
-            $('#nextButton').on('click', function () {
-                pageNumber++;
-                loadTrip(pageNumber, pageSize);
+            $("#admingrid").kendoGrid({
+                dataSource: dataSource,
+                columns: [
+                    { selectable: true, width: "50px" },
+                    { field: "c_id", title: "Id", hidden: true },
+                    { field: "c_triptype", title: "Type", width: 120 },
+                    { field: "c_tripname", title: "Name", width: 120 },
+                    { field: "c_date", title: "Date" },
+                    { field: "c_time", title: "Time" },
+                    { field: "c_days", title: "Days" },
+                    { field: "c_image", title: "Image", template: '<img src="#= c_image #" alt="#= c_image #" style= "border-radius:20%; width:30px; height:30px"></img>' },
+                    { field: "c_price", title: "Price" },
+                    { field: "c_availableseat", title: "Available seat" },
+                    { field: "c_initialseat", title: "Initial seat" },
+                    { field: "c_description", title: "Description" },
+                    { command: [{ text: "Edit trip", click: edittrip }, { text: "Delete", click: deletetrip }], title: "Action", width: 200 }
+                ],
+                editable: "popup",
+                pageable: true,
+                sortable: true,
+                filterable: true,
+                resizeable: true,
+                toolbar: [{ template: "<button id='addtripbtn'>Add Trip</button>" }, { template: "<button id='deletetrip'>delete Trip</button>" }, "search", "excel"],
+                search: { fields: ["c_triptype", "c_tripname", "c_date", "c_time", "c_days", "c_price", "c_availableseat", "c_initialseat", "c_description"] },
+                excel: { fileName: "alltrip.xlsx" },
             });
+
 
             //add trip pop up window
             $("#addtrip").kendoWindow({
@@ -153,17 +122,58 @@
             function AddTrip() {
                 $("#addtrip").data("kendoWindow").center().open();
             };
-            
+
             //when you click on addtrip button then call AddTrip function and open pop up
             $("#addtripbtn").kendoButton({
                 themeColor: "secondary",
             }).click(AddTrip);
+
+
+            $("#deletetrip").kendoButton({
+                themeColor: "secondary",
+            }).click(DeleteMultiple);
+
+            function edittrip(e) {
+                e.preventDefault();
+                var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+                var tripid = dataItem.c_id;
+                // Open the popup window
+                $("#addtrip").data("kendoWindow").center().open();
+
+                // Populate the form fields with trip data
+                $("#c_id").val(tripid);
+                $("input[name='c_triptype'][value='" + dataItem.c_triptype + "']").prop("checked", true);
+                $("#c_tripid").data("kendoDropDownList").value(dataItem.c_tripid);
+                $("#c_date").data("kendoDatePicker").value(dataItem.c_date);
+                $("#c_time").data("kendoTimePicker").value(dataItem.c_time);
+                $("#c_days").val(dataItem.c_days);
+                $("#c_price").val(dataItem.c_price);
+                $("#c_availableseat").val(dataItem.c_availableseat);
+                $("#c_initialseat").val(dataItem.c_initialseat);
+                $("#c_description").val(dataItem.c_description);
+
+                // Change the button text to "Update trip"
+                $("#update").text("Update trip");
+            };
+
+            function deletetrip(e) {
+                e.preventDefault();
+                var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+                var tripid = dataItem.c_id;
+                $.ajax({
+                    url: "/Admin/DeleteTrip/" + tripid,
+                    method: "DELETE",
+                    success: function (response) {
+                        dataSource.read();
+                    }
+                });
+            };
+
+
         });
 
-
-
-        function EditStudent() {
-            var id = $("#c_id").val();
+        function EditTrip() {
+            var id = parseInt($("#c_id").val());
             var trip = {
                 c_triptype: $("input[name='c_triptype']:checked").val(),
                 c_tripid: parseInt($("#c_tripid").val()),
@@ -231,40 +241,40 @@
 
 
         async function DeleteMultiple() {
-                var grid = $("#admingrid").data('kendoGrid');
-                var rows = grid.select();
-                var ids = [];
-                var i = 0;
-                rows.each(function () {
-                    ids[i] = grid.dataItem(this).c_id;
-                    i++;
-                });
-                ids.forEach(function (id) {
-                    console.log(id);
-                });
-                if (i == 0) {
-                    alert("please select atleast one student");
-                }
-                else {
-                    for (var d = 0; d < ids.length; d++) {
-                        await $.ajax({
-                            url:"/Admin/DeleteTrip/"+ids[d],
-                            type: 'DELETE',
-                            success: function () {
-                                console.log("Deleted");
-                            },
-                            error: function (error) {
-                                console.log("Error while deleting: " + error);
-                            }
-                        });
-                        await sleep(100);
-                    }
-                    window.location.reload();
-                }
+            var grid = $("#admingrid").data('kendoGrid');
+            var rows = grid.select();
+            var ids = [];
+            var i = 0;
+            rows.each(function () {
+                ids[i] = grid.dataItem(this).c_id;
+                i++;
+            });
+            ids.forEach(function (id) {
+                console.log(id);
+            });
+            if (i == 0) {
+                alert("please select atleast one student");
             }
-            function sleep(ms) {
-                return new Promise(resolve => setTimeout(resolve, ms));
+            else {
+                for (var d = 0; d < ids.length; d++) {
+                    await $.ajax({
+                        url: "/Admin/DeleteTrip/" + ids[d],
+                        type: 'DELETE',
+                        success: function () {
+                            console.log("Deleted");
+                        },
+                        error: function (error) {
+                            console.log("Error while deleting: " + error);
+                        }
+                    });
+                    await sleep(100);
+                }
+                window.location.reload();
             }
+        }
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
 
     </script>
 
@@ -274,16 +284,14 @@
 
 <body>
     <div class="container">
-        <div class="table">
+        @* <div class="table">
             <div class="row">
                 <div class="col-sm-3"><button class="" onclick="DeleteMultiple()">Delete Student</button></div>
             </div>
-        </div>
+        </div> *@
 
     </div>
     <div id="admingrid"></div>
-    <button id="preButton">Pre</button>
-    <button id="nextButton">Next</button>
 
     <div id="addtrip">
         <div>

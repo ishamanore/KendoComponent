@@ -15,6 +15,8 @@
     <title>Document</title>
 
     <script>
+        var pageNumber = 1;
+        var pageSize = 1;
         $(document).ready(function () {
             $("#c_tripid").kendoDropDownList({
                 optionLabel: "--select--",
@@ -46,81 +48,9 @@
                 themeColor: "error",
             });
 
-            var dataSource = new kendo.data.DataSource({
-                transport: {
-                    read: {
-                        url: "/Admin/GetAllTrip/",
-                        dataType: "json",
-
-                    },
-                },
-                serverPaging: true,
-                schema: {
-                    model: {
-                        id: "c_id",
-                        fields: {
-                            c_id: { type: "number" },
-                            c_triptype: { type: "string" },
-                            c_tripname: { type: "string" },
-                            c_date: { type: "string" },
-                            c_time: { type: "string" },
-                            c_days: { type: "number" },
-                            c_image: { type: "string" },
-                            c_price: { type: "string" },
-                            c_availableseat: { type: "number" },
-                            c_initialseat: { type: "number" },
-                            c_description: { type: "string" },
-                        }
-                    }
-                },
-            });
-
-                $("#admingrid").kendoGrid({
-                    dataSource: dataSource,
-                    columns: [
-                        { field: "c_id", title: "Id", hidden: true },
-                        { field: "c_triptype", title: "Type", width: 120 },
-                        { field: "c_tripname", title: "Name", width: 120 },
-                        { field: "c_date", title: "Date" },
-                        { field: "c_time", title: "Time" },
-                        { field: "c_days", title: "Days" },
-                        { field: "c_image", title: "Image", template: '<img src="#= c_image #" alt="#= c_image #" style= "border-radius:20%; width:30px; height:30px"></img>' },
-                        { field: "c_price", title: "Price" },
-                        { field: "c_availableseat", title: "Available seat" },
-                        { field: "c_initialseat", title: "Initial seat" },
-                        { field: "c_description", title: "Description" },
-                    ],
-                    editable: "popup",
-                    sortable: true,
-                    filterable: true,
-                    resizeable: true,
-                    toolbar: [{ template: "<button id='addtripbtn'>Add Trip</button>" }, "search", "excel"],
-                    search: { fields: ["c_triptype", "c_tripname", "c_date", "c_time", "c_days", "c_price", "c_availableseat", "c_initialseat", "c_description"] },
-                    excel: { fileName: "alltrip.xlsx" },
-                    dataBound: function() {
-                        // Custom footer content or functionality
-                        var footer = this.element.find(".k-grid-footer");
-                        if (!footer.length) {
-                            this.element.append("<div class='k-grid-footer'>Footer Content Here</div>");
-                        }
-                    }
-                });
-            }
-
             // Load initial data
             loadTrip(pageNumber, pageSize);
 
-            $('#preButton').on('click', function () {
-                if (pageNumber > 1) {
-                    pageNumber--;
-                    loadTrip(pageNumber, pageSize);
-                }
-            });
-
-            $('#nextButton').on('click', function () {
-                pageNumber++;
-                loadTrip(pageNumber, pageSize);
-            });
 
             //add trip pop up window
             $("#addtrip").kendoWindow({
@@ -190,6 +120,79 @@
 
 
         });
+
+        function loadTrip(pageNum, pageSize) {
+                var dataSource = new kendo.data.DataSource({
+                    transport: {
+                        read: {
+                            url: "/Admin/GetAllTrip/",
+                            dataType: "json",
+                            data: { pageNumber: pageNum, pageSize: pageSize },
+                        },
+                    },
+                    schema: {
+                        model: {
+                            id: "c_id",
+                            fields: {
+                                c_id: { type: "number" },
+                                c_triptype: { type: "string" },
+                                c_tripname: { type: "string" },
+                                c_date: { type: "string" },
+                                c_time: { type: "string" },
+                                c_days: { type: "number" },
+                                c_image: { type: "string" },
+                                c_price: { type: "string" },
+                                c_availableseat: { type: "number" },
+                                c_initialseat: { type: "number" },
+                                c_description: { type: "string" },
+                            }
+                        }
+                    },
+                });
+
+                $("#admingrid").kendoGrid({
+                    dataSource: dataSource,
+                    columns: [
+                        { field: "c_id", title: "Id", hidden: true },
+                        { field: "c_triptype", title: "Type", width: 120 },
+                        { field: "c_tripname", title: "Name", width: 120 },
+                        { field: "c_date", title: "Date" },
+                        { field: "c_time", title: "Time" },
+                        { field: "c_days", title: "Days" },
+                        { field: "c_image", title: "Image", template: '<img src="#= c_image #" alt="#= c_image #" style= "border-radius:20%; width:30px; height:30px"></img>' },
+                        { field: "c_price", title: "Price" },
+                        { field: "c_availableseat", title: "Available seat" },
+                        { field: "c_initialseat", title: "Initial seat" },
+                        { field: "c_description", title: "Description" },
+                    ],
+                    editable: "popup",
+                    sortable: true,
+                    filterable: true,
+                    resizeable: true,
+                    toolbar: [{ template: "<button id='addtripbtn'>Add Trip</button>" }, "search", "excel"],
+                    search: { fields: ["c_triptype", "c_tripname", "c_date", "c_time", "c_days", "c_price", "c_availableseat", "c_initialseat", "c_description"] },
+                    excel: { fileName: "alltrip.xlsx" },
+                    dataBound: function() {
+                        var footer = this.element.find(".k-grid-footer");
+                        if (!footer.length) {
+                            this.element.append("<div class='k-grid-footer'><button class='k-button mr-3' onclick='preButton()'>Pre</button><button class='k-button' onclick='nextButton()'>Next</button></div>");
+                        }
+                    }
+                });
+            }
+
+        function nextButton(){
+            pageNumber++;
+            loadTrip(pageNumber, pageSize);
+        }
+
+        function preButton(){
+            if (pageNumber > 1) {
+                pageNumber--;
+                loadTrip(pageNumber, pageSize);
+            }
+        }
+
 
         function EditTrip() {
             var id = parseInt($("#c_id").val());
